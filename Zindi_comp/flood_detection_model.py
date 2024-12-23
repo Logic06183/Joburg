@@ -1,19 +1,4 @@
-from flood_detection_model import ModelConfig, FloodDetectionModel, Trainer, predict
-
-# Create config
-config = ModelConfig()
-
-# Initialize model
-model = FloodDetectionModel(config=config)
-
-# Create trainer
-trainer = Trainer(config, model, train_data, valid_data)
-
-# Train model
-trainer.train()
-
-# Make predictions
-predictions = predict(trainer.state, model, test_data, config.batch_size)"""
+"""
 Flood Detection Model for South Africa
 This module implements a deep learning model that combines transformer-based processing
 of time series data with CNN-based processing of satellite imagery to detect flood events.
@@ -21,14 +6,14 @@ of time series data with CNN-based processing of satellite imagery to detect flo
 
 import jax
 import jax.numpy as jnp
-from flax import linen as nn
-from dataclasses import dataclass
-from typing import Tuple, Dict
 import optax
+from flax import linen as nn
 from flax.training import train_state
+from typing import Dict, Tuple
+from tqdm import tqdm
+from dataclasses import dataclass
 from functools import partial
 import numpy as np
-from tqdm.auto import tqdm
 
 @dataclass
 class ModelConfig:
@@ -267,7 +252,7 @@ class Trainer:
 def predict(model_state: train_state.TrainState, 
            model: FloodDetectionModel,
            test_data: Dict,
-           batch_size: int) -> jnp.ndarray:
+           batch_size: int):
     """
     Generate predictions for test data.
     
@@ -281,19 +266,13 @@ def predict(model_state: train_state.TrainState,
         Array of predictions
     """
     predictions = []
-    
     for i in range(0, len(test_data['timeseries']), batch_size):
         batch_idx = slice(i, i + batch_size)
-        batch = {
-            'timeseries': test_data['timeseries'][batch_idx],
-            'images': test_data['images'][batch_idx]
-        }
-        
-        logits = model.apply(
-            {'params': model_state.params},
-            (batch['timeseries'], batch['images']),
-            train=False
+        batch = (
+            test_data['timeseries'][batch_idx],
+            test_data['images'][batch_idx]
         )
+        logits = model.apply({'params': model_state.params}, batch, train=False)
         predictions.append(jax.nn.sigmoid(logits))
     
     return jnp.concatenate(predictions, axis=0)
