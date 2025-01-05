@@ -8,6 +8,7 @@ import matplotlib.patches as patches
 from PIL import Image
 import io
 from tqdm import tqdm
+import calendar
 
 # Set publication-ready style
 plt.style.use('seaborn-v0_8-paper')
@@ -28,280 +29,213 @@ except Exception as e:
 
 print("Fetching data from Google Earth Engine...")
 
+# Define Johannesburg coordinates (City Center)
+JOBURG_CENTER = ee.Geometry.Point([28.0473, -26.2041])
+JOBURG_AREA = JOBURG_CENTER.buffer(5000)  # 5km buffer is enough for city center
+
 def get_temperature_data(start_year, end_year, aoi, dataset='ERA5', scenario=None):
     if dataset == 'ERA5':
-        def get_monthly_temp(start_date, end_date):
-            try:
-                dataset = ee.ImageCollection('ECMWF/ERA5/MONTHLY')\
-                    .filter(ee.Filter.date(start_date, end_date))\
-                    .select('mean_2m_air_temperature')
+        try:
+            # Use ERA5 monthly data for speed
+            collection = ee.ImageCollection('ECMWF/ERA5/MONTHLY')\
+                .filter(ee.Filter.date(f'{start_year}-01-01', f'{end_year}-12-31'))\
+                .select('maximum_2m_air_temperature')
+            
+            def process_image(image):
+                date = ee.Date(image.get('system:time_start'))
+                temp = image.reduceRegion(
+                    reducer=ee.Reducer.max(),
+                    geometry=aoi,
+                    scale=5000  # 5km resolution is enough for city-level analysis
+                ).get('maximum_2m_air_temperature')
                 
-                def process_image(image):
-                    date = ee.Date(image.get('system:time_start'))
-                    month = date.get('month')
-                    year = date.get('year')
-                    
-                    temp = image.reduceRegion(
-                        reducer=ee.Reducer.mean(),
-                        geometry=aoi,
-                        scale=30000
-                    ).get('mean_2m_air_temperature')
-                    
-                    temp_celsius = ee.Number(temp).subtract(273.15)
-                    
-                    return ee.Feature(None, {
-                        'temperature': temp_celsius,
-                        'month': month,
-                        'year': year
-                    })
+                return ee.Feature(None, {
+                    'temperature': ee.Number(temp).subtract(273.15),  # Convert to Celsius
+                    'month': date.get('month'),
+                    'year': date.get('year')
+                })
+            
+            features = collection.map(process_image).getInfo()
+            
+            if features and 'features' in features:
+                data = []
+                for f in features['features']:
+                    if 'properties' in f:
+                        data.append(f['properties'])
                 
-                features = dataset.map(process_image)
-                return features.getInfo()
-            except Exception as e:
-                print(f"Error fetching ERA5 data for {start_date} to {end_date}: {e}")
-                return None
+                df = pd.DataFrame(data)
+                if not df.empty:
+                    print(f"\nERA5 data for {start_year}-{end_year}")
+                    print(f"Max temperature: {df['temperature'].max():.1f}°C")
+                    print(f"Temperature range: {df['temperature'].min():.1f}°C to {df['temperature'].max():.1f}°C")
+                    return df
+            return None
+        except Exception as e:
+            print(f"Error with ERA5 data: {e}")
+            return None
     
     elif dataset == 'CMIP6':
-        def get_monthly_temp(start_date, end_date):
-            try:
-                # Get daily data and aggregate to monthly
-                dataset = ee.ImageCollection('NASA/GDDP-CMIP6')\
-                    .filter(ee.Filter.date(start_date, end_date))\
+        try:
+            # Use CMIP6 data with simplified processing - one year at a time
+            all_data = []
+            
+            for year in range(start_year, end_year + 1):
+                collection = ee.ImageCollection('NASA/GDDP-CMIP6')\
+                    .filter(ee.Filter.date(f'{year}-01-01', f'{year}-12-31'))\
                     .filter(ee.Filter.eq('scenario', scenario))\
-                    .filter(ee.Filter.eq('model', 'EC-Earth3'))\
                     .select('tas')
                 
-                # Function to get month and year from an image
-                def get_month_year(image):
-                    date = ee.Date(image.get('system:time_start'))
-                    return ee.Feature(None, {
-                        'month': date.get('month'),
-                        'year': date.get('year')
-                    })
-                
-                # Get unique month-year combinations
-                dates = dataset.map(get_month_year).distinct(['month', 'year']).limit(500)
-                
-                def process_monthly_temp(feature):
-                    month = feature.get('month')
-                    year = feature.get('year')
-                    
-                    # Filter images for this month and year
-                    monthly_images = dataset.filter(
-                        ee.Filter.And(
-                            ee.Filter.eq('month', month),
-                            ee.Filter.eq('year', year)
-                        )
+                # Get monthly maximums
+                for month in range(1, 13):
+                    monthly_data = collection.filter(
+                        ee.Filter.calendarRange(month, month, 'month')
                     )
                     
-                    # Calculate monthly mean
-                    monthly_mean = monthly_images.mean()
-                    
-                    temp = monthly_mean.reduceRegion(
-                        reducer=ee.Reducer.mean(),
-                        geometry=aoi,
-                        scale=30000
-                    ).get('tas')
-                    
-                    temp_celsius = ee.Number(temp).subtract(273.15)
-                    
-                    return ee.Feature(None, {
-                        'temperature': temp_celsius,
-                        'month': month,
-                        'year': year
-                    })
-                
-                features = dates.map(process_monthly_temp)
-                return features.getInfo()
-            except Exception as e:
-                print(f"Error fetching CMIP6 data for {start_date} to {end_date}: {e}")
-                return None
-
-    print(f"Fetching {dataset} data for {start_year}-{end_year}...")
-    data = get_monthly_temp(f'{start_year}-01-01', f'{end_year}-12-31')
-    
-    if data is None or 'features' not in data or not data['features']:
-        print(f"No data returned for {dataset} {start_year}-{end_year}")
-        return None
-        
-    try:
-        features_list = []
-        for feature in data['features']:
-            props = feature['properties']
-            if all(key in props for key in ['temperature', 'month', 'year']):
-                try:
-                    temp = float(props['temperature'])
-                    month = int(props['month'])
-                    year = int(props['year'])
-                    if -100 <= temp <= 100 and 1 <= month <= 12:  # Basic validation
-                        features_list.append({
+                    if monthly_data.size().getInfo() > 0:
+                        max_temp = monthly_data.max()
+                        temp = max_temp.reduceRegion(
+                            reducer=ee.Reducer.max(),
+                            geometry=aoi,
+                            scale=5000
+                        ).get('tas')
+                        
+                        temp_celsius = ee.Number(temp).subtract(273.15).getInfo()
+                        all_data.append({
                             'year': year,
                             'month': month,
-                            'temperature': temp
+                            'temperature': temp_celsius
                         })
-                except (ValueError, TypeError) as e:
-                    print(f"Error processing feature: {e}")
-                    continue
-        
-        if not features_list:
-            print(f"No valid features found for {dataset} {start_year}-{end_year}")
-            return None
+                
+                print(f"Processed CMIP6 data for year {year}")
             
-        df = pd.DataFrame(features_list)
-        
-        if scenario:
-            df['scenario'] = scenario
-        
-        print(f"Successfully processed {dataset} data for {start_year}-{end_year}")
-        print(f"Data shape: {df.shape}, Columns: {df.columns.tolist()}")
-        print(f"Temperature range: {df['temperature'].min():.1f}°C to {df['temperature'].max():.1f}°C")
-        return df
-    
-    except Exception as e:
-        print(f"Error processing {dataset} data for {start_year}-{end_year}: {e}")
-        return None
+            if all_data:
+                df = pd.DataFrame(all_data)
+                print(f"\nCMIP6 {scenario} data for {start_year}-{end_year}")
+                print(f"Max temperature: {df['temperature'].max():.1f}°C")
+                print(f"Temperature range: {df['temperature'].min():.1f}°C to {df['temperature'].max():.1f}°C")
+                return df
+            return None
+        except Exception as e:
+            print(f"Error with CMIP6 data: {e}")
+            return None
 
-def plot_frame(historical_dfs, current_df, projection_dfs, frame_number, total_frames):
-    # Create figure with fixed size and DPI
-    dpi = 100
-    fig = plt.figure(figsize=(12, 14), dpi=dpi)
-    gs = plt.GridSpec(2, 1, height_ratios=[1, 1], hspace=0.3)
-    ax1 = fig.add_subplot(gs[0])
-    ax2 = fig.add_subplot(gs[1])
+def get_data_for_period(start_year, end_year, aoi, dataset='ERA5', scenario=None):
+    print(f"\nFetching {dataset} data for {start_year}-{end_year}...")
     
-    # Color schemes and labels
-    periods = {
-        '1979-1989': {'color': '#1f78b4', 'style': '-'},
-        '1990-2000': {'color': '#a6cee3', 'style': '-'},
-        '2015-2024': {'color': '#33a02c', 'style': '-'},
-        '2045-2055 (SSP2-4.5)': {'color': '#fb9a99', 'style': '--'},
-        '2045-2055 (SSP5-8.5)': {'color': '#e31a1c', 'style': '--'}
-    }
+    # Get data in smaller chunks if period is long
+    if end_year - start_year > 5:
+        mid_year = start_year + (end_year - start_year) // 2
+        df1 = get_temperature_data(start_year, mid_year, aoi, dataset, scenario)
+        df2 = get_temperature_data(mid_year + 1, end_year, aoi, dataset, scenario)
+        if df1 is not None and df2 is not None:
+            return pd.concat([df1, df2])
+        return df1 if df1 is not None else df2
     
+    return get_temperature_data(start_year, end_year, aoi, dataset, scenario)
+
+def create_comparison_plot(historical_dfs, current_df, projection_dfs):
     seasons = {
-        'Spring': {'months': [9, 10, 11], 'ax': ax1, 'title': 'Spring (September-November)'},
-        'Summer': {'months': [12, 1, 2], 'ax': ax2, 'title': 'Summer (December-February)'}
+        'Spring': list(range(9, 12)),  # September to November
+        'Summer': [12, 1, 2]  # December to February
     }
     
-    # Calculate transition factor (0 to 1)
-    transition = frame_number / total_frames
+    fig, axes = plt.subplots(2, 1, figsize=(10, 12))
+    fig.suptitle('Maximum Temperature Change in Johannesburg\nWarming Faster Than Global Average', y=0.95)
     
-    for season_name, season_info in seasons.items():
-        ax = season_info['ax']
-        months = season_info['months']
+    for idx, (season, months) in enumerate(seasons.items()):
+        ax = axes[idx]
         
-        # Plot with transition effect
-        periods_to_plot = []
-        if transition < 0.25:  # Show historical data first
-            alpha = min(1, transition * 4)
-            if '1979-1989' in historical_dfs:
-                periods_to_plot.append(('1979-1989', historical_dfs['1979-1989'], alpha))
-        elif transition < 0.5:  # Add 1990-2000
-            alpha = min(1, (transition - 0.25) * 4)
-            if '1979-1989' in historical_dfs:
-                periods_to_plot.append(('1979-1989', historical_dfs['1979-1989'], 1))
-            if '1990-2000' in historical_dfs:
-                periods_to_plot.append(('1990-2000', historical_dfs['1990-2000'], alpha))
-        elif transition < 0.75:  # Add current period
-            alpha = min(1, (transition - 0.5) * 4)
-            for period, df in historical_dfs.items():
-                periods_to_plot.append((period, df, 1))
-            periods_to_plot.append(('2015-2024', current_df, alpha))
-        else:  # Add projections
-            alpha = min(1, (transition - 0.75) * 4)
-            for period, df in historical_dfs.items():
-                periods_to_plot.append((period, df, 1))
-            periods_to_plot.append(('2015-2024', current_df, 1))
-            for scenario, df in projection_dfs.items():
-                periods_to_plot.append((scenario, df, alpha))
+        # Filter data for the current season and get maximum temperatures
+        hist_season = pd.concat([df[df['month'].isin(months)]['temperature'] for df in historical_dfs.values()])
+        curr_season = current_df[current_df['month'].isin(months)]['temperature']
+        proj_season = pd.concat([df[df['month'].isin(months)]['temperature'] for df in projection_dfs.values()])
         
-        for period, df, alpha in periods_to_plot:
-            data = df[df['month'].isin(months)]['temperature']
-            mean_temp = data.mean()
-            sns.kdeplot(data=data, ax=ax, color=periods[period]['color'],
-                       fill=True, alpha=alpha * 0.3, 
-                       label=f'{period} (Mean: {mean_temp:.1f}°C)')
+        # Calculate means of maximum temperatures
+        hist_max_mean = hist_season.mean()
+        curr_max_mean = curr_season.mean()
+        proj_max_mean = proj_season.mean()
         
-        # Set fixed axis limits for consistent frame sizes
-        ax.set_xlim(5, 30)
-        ax.set_ylim(0, 0.5)
+        # Plot density curves with higher temperature range
+        sns.kdeplot(data=hist_season, ax=ax, color='lightblue', alpha=0.6, 
+                   label=f'Pre-warming (1979-1989) (Mean Max: {hist_max_mean:.1f}°C)')
+        sns.kdeplot(data=curr_season, ax=ax, color='lightgreen', alpha=0.6, 
+                   label=f'Current (2015-2024) (Mean Max: {curr_max_mean:.1f}°C)')
+        sns.kdeplot(data=proj_season, ax=ax, color='bisque', alpha=0.6, 
+                   label=f'Projected (2045-2055) (Mean Max: {proj_max_mean:.1f}°C)')
         
-        # Customize the plot
-        ax.set_title(season_info['title'], pad=20, fontsize=12, fontweight='bold')
-        ax.set_xlabel('Temperature (°C)', fontsize=11)
-        ax.set_ylabel('Density', fontsize=11)
-        ax.grid(True, alpha=0.3)
-        ax.legend(bbox_to_anchor=(1.05, 1), loc='upper left', fontsize=10)
-        ax.set_yticks([])
+        # Add arrows and temperature change annotations
+        curr_change = curr_max_mean - hist_max_mean
+        proj_change = proj_max_mean - curr_max_mean
+        arrow_y = ax.get_ylim()[1] * 0.8
+        
+        # First arrow (historical to current)
+        ax.annotate(f'+{curr_change:.1f}°C', 
+                   xy=(hist_max_mean, arrow_y),
+                   xytext=(curr_max_mean, arrow_y),
+                   arrowprops=dict(arrowstyle='<->', color='blue', lw=1),
+                   ha='center', va='bottom')
+        
+        # Second arrow (current to projected)
+        ax.annotate(f'+{proj_change:.1f}°C',
+                   xy=(curr_max_mean, arrow_y),
+                   xytext=(proj_max_mean, arrow_y),
+                   arrowprops=dict(arrowstyle='<->', color='red', lw=1),
+                   ha='center', va='bottom')
+        
+        ax.set_title(f'{season} ({calendar.month_name[months[0]].capitalize()}-{calendar.month_name[months[-1]].capitalize()})')
+        ax.set_xlabel('Maximum Temperature (°C)')
+        ax.set_ylabel('Density')
+        ax.legend()
+        
+        # Set x-axis range to focus on high temperatures
+        if season == 'Spring':
+            ax.set_xlim(15, 40)  # Adjusted for spring maximum temperatures
+        else:  # Summer
+            ax.set_xlim(20, 45)  # Adjusted for summer maximum temperatures
     
     # Add data source information
-    source_text = (
-        "Data sources:\n"
-        "Historical & Current: ERA5 monthly averaged data on single levels from 1979 to present (Copernicus Climate Change Service)\n"
-        "Projections: NASA Earth Exchange Global Daily Downscaled Projections (NEX-GDDP-CMIP6)"
-    )
+    plt.figtext(0.1, 0.02, 
+                'Data sources: ERA5-Land monthly averaged data (Copernicus Climate Change Service)\n' +
+                'Projections: CMIP6 Global Projections (Worst-case scenario SSP5-8.5)',
+                fontsize=8, ha='left')
     
-    # Create a white box for the source text
-    source_bbox = dict(boxstyle='round,pad=0.5', facecolor='white', alpha=0.8)
-    plt.figtext(0.05, 0.02, source_text, fontsize=8, bbox=source_bbox)
-    
-    # Save to buffer
-    buf = io.BytesIO()
-    plt.savefig(buf, format='png', bbox_inches='tight', dpi=dpi)
+    plt.tight_layout()
+    plt.savefig('temperature_distributions.png', 
+                bbox_inches='tight',
+                dpi=300,
+                facecolor='white',
+                edgecolor='none')
     plt.close()
     
-    # Convert to PIL Image
-    buf.seek(0)
-    return Image.open(buf)
-
-def create_temperature_animation(historical_dfs, current_df, projection_dfs):
-    print("\nCreating animation frames...")
-    n_frames = 60  # Total number of frames for smooth animation
-    
-    # Create frames
-    frames = []
-    for i in tqdm(range(n_frames)):
-        img = plot_frame(historical_dfs, current_df, projection_dfs, i, n_frames-1)
-        # Convert to RGB mode and resize to fixed dimensions
-        img = img.convert('RGB')
-        img = img.resize((1200, 1400), Image.Resampling.LANCZOS)
-        frames.append(img)
-    
-    print("\nSaving GIF animation...")
-    # Save the animation with a longer duration for the final frame
-    durations = [100] * (n_frames - 1) + [2000]  # 100ms per frame, 2s for last frame
-    frames[0].save(
-        'temperature_evolution.gif',
-        save_all=True,
-        append_images=frames[1:],
-        duration=durations,
-        loop=0
-    )
-    
-    print("Animation saved as 'temperature_evolution.gif'")
+    print("Plot saved as 'temperature_distributions.png'")
 
 if __name__ == "__main__":
-    print("Fetching data from Google Earth Engine...")
+    print("=== Testing with smaller date ranges first ===")
     
-    print("\nSetting up data retrieval...")
+    # Test with just 2 years of historical data
+    print("\nTesting Historical Data (1979-1980)...")
+    historical_dfs = {}
+    historical_data = get_data_for_period(1979, 1980, JOBURG_AREA, 'ERA5')
+    if historical_data is not None:
+        historical_dfs['1979-1980'] = historical_data
+        print(" Historical data retrieved successfully")
     
-    # Define your area of interest (Johannesburg)
-    aoi = ee.Geometry.Point([28.0473, -26.2041])
+    # Test with 2 years of current data
+    print("\nTesting Current Data (2022-2023)...")
+    current_df = get_data_for_period(2022, 2023, JOBURG_AREA, 'ERA5')
+    if current_df is not None:
+        print(" Current data retrieved successfully")
     
-    # Get historical data
-    historical_dfs = {
-        '1979-1989': get_temperature_data(1979, 1989, aoi),
-        '1990-2000': get_temperature_data(1990, 2000, aoi)
-    }
+    # Test with 2 years of projection data
+    print("\nTesting Projection Data (2045-2046)...")
+    projection_dfs = {}
+    projection_data = get_data_for_period(2045, 2046, JOBURG_AREA, 'CMIP6', scenario='ssp585')
+    if projection_data is not None:
+        projection_dfs['2045-2046 (SSP5-8.5)'] = projection_data
+        print(" Projection data retrieved successfully")
     
-    # Get current data
-    current_df = get_temperature_data(2015, 2024, aoi)
-    
-    # Get projection data
-    projection_dfs = {
-        '2045-2055 (SSP2-4.5)': get_temperature_data(2045, 2055, aoi, dataset='CMIP6', scenario='ssp245'),
-        '2045-2055 (SSP5-8.5)': get_temperature_data(2045, 2055, aoi, dataset='CMIP6', scenario='ssp585')
-    }
-    
-    # Create the animation
-    create_temperature_animation(historical_dfs, current_df, projection_dfs)
+    # Create the plot if we have data
+    if current_df is not None:
+        print("\nCreating plot...")
+        create_comparison_plot(historical_dfs, current_df, projection_dfs)
+        print(" Done!")
