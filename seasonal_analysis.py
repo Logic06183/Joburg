@@ -1,6 +1,7 @@
 import ee
 import pandas as pd
 import matplotlib.pyplot as plt
+import matplotlib.collections
 import seaborn as sns
 import numpy as np
 from datetime import datetime
@@ -10,6 +11,9 @@ import io
 from tqdm import tqdm
 import calendar
 import sys
+import pickle
+import os
+import imageio.v2 as imageio
 
 # Set publication-ready style
 plt.style.use('seaborn-v0_8-paper')
@@ -30,8 +34,8 @@ except Exception as e:
 
 print("Fetching data from Google Earth Engine...")
 
-# Define Johannesburg coordinates (City Center)
-JOBURG_CENTER = ee.Geometry.Point([28.0473, -26.2041])
+# Define Johannesburg coordinates (Rahima Moosa Hospital)
+JOBURG_CENTER = ee.Geometry.Point([28.0183, -26.1752])
 JOBURG_AREA = JOBURG_CENTER.buffer(5000)  # 5km buffer is enough for city center
 
 def get_temperature_data(start_year, end_year, aoi, dataset='ERA5', scenario=None):
@@ -147,147 +151,280 @@ def get_data_for_period(start_year, end_year, aoi, dataset='ERA5', scenario=None
         return final_df
     return None
 
-def create_comparison_plot(historical_dfs, current_df, projection_dfs):
-    """Create comparison plot for historical, current and projected temperatures."""
-    print("\nCreating visualization...")
-    
-    # Set up the plot style
+def load_cached_data(cache_file):
+    """Load data from cache if available."""
+    if os.path.exists(cache_file):
+        print(f"Loading cached data from {cache_file}...")
+        with open(cache_file, 'rb') as f:
+            return pickle.load(f)
+    return None
+
+def save_to_cache(data, cache_file):
+    """Save data to cache file."""
+    print(f"Saving data to cache {cache_file}...")
+    with open(cache_file, 'wb') as f:
+        pickle.dump(data, f)
+
+def create_frame(historical_dfs, current_df, projection_dfs, spring_summer_months, frame_number, temp_folder):
+    """Create a single frame for the animation."""
     plt.style.use('default')
-    plt.rcParams.update({
-        'figure.figsize': [12, 14],  # Adjusted for better aspect ratio
-        'font.size': 12,
-        'axes.grid': True,
-        'grid.alpha': 0.3,
-        'axes.labelsize': 11,
-        'axes.titlesize': 12,
-        'xtick.labelsize': 10,
-        'ytick.labelsize': 10,
-        'legend.fontsize': 10,
-        'figure.dpi': 300
-    })
+    fig, ax = plt.subplots(figsize=(12, 8))
     
-    fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(12, 14), height_ratios=[1, 1])
-    fig.subplots_adjust(top=0.92, bottom=0.08, hspace=0.25)  # Adjusted spacing
-    fig.suptitle('Temperature Analysis for Johannesburg\nHistorical (1979-1989) vs Current (2015-2024) vs Projected (2045-2055)', 
-                 fontsize=14, fontweight='bold', y=0.95)
+    # Colors for different periods - temperature progression from cool to hot
+    historical_color = '#4575B4'  # Cool blue
+    current_color = '#FF6B35'     # Warm orange
+    projected_color = '#D73027'   # Hot red
     
-    # Colors for different periods
-    historical_color = '#1f77b4'  # Blue
-    current_color = '#2ca02c'     # Green
-    projected_color = '#ff7f0e'   # Orange
+    # Process data
+    if isinstance(historical_dfs, dict) and historical_dfs:
+        historical_seasonal = pd.concat([df[df['month'].isin(spring_summer_months)] 
+                                       for df in historical_dfs.values()])
+    else:
+        historical_seasonal = historical_dfs[historical_dfs['month'].isin(spring_summer_months)]
     
-    # Plot Spring/Summer (Sep-Feb)
-    spring_summer_months = [9, 10, 11, 12, 1, 2]
-    plot_seasonal_kde(ax1, historical_dfs, current_df, projection_dfs, spring_summer_months,
-                     historical_color, current_color, projected_color)
-    ax1.set_title('Spring/Summer Temperatures (Sep-Feb)', pad=10)
+    current_seasonal = current_df[current_df['month'].isin(spring_summer_months)]
     
-    # Plot Autumn/Winter (Mar-Aug)
-    autumn_winter_months = [3, 4, 5, 6, 7, 8]
-    plot_seasonal_kde(ax2, historical_dfs, current_df, projection_dfs, autumn_winter_months,
-                     historical_color, current_color, projected_color)
-    ax2.set_title('Autumn/Winter Temperatures (Mar-Aug)', pad=10)
+    if isinstance(projection_dfs, dict) and projection_dfs:
+        projected_seasonal = pd.concat([df[df['month'].isin(spring_summer_months)] 
+                                      for df in projection_dfs.values()])
+    else:
+        projected_seasonal = projection_dfs[projection_dfs['month'].isin(spring_summer_months)]
     
-    # Common settings for both subplots
-    for ax in [ax1, ax2]:
-        ax.set_xlabel('Maximum Temperature (°C)')
-        ax.set_ylabel('Density')
-        ax.grid(True, alpha=0.3, linestyle='--')
-        ax.legend(loc='upper right', framealpha=0.9)
-        
-    # Add data source information
-    fig.text(0.1, 0.02, 
-             'Data sources: ERA5-Land monthly averaged data (Copernicus Climate Change Service)\n' +
-             'Projections: CMIP6 Global Projections (Worst-case scenario SSP5-8.5)',
-             fontsize=8, ha='left')
+    # Calculate means
+    historical_mean = historical_seasonal['temperature'].mean()
+    current_mean = current_seasonal['temperature'].mean()
+    projected_mean = projected_seasonal['temperature'].mean()
     
-    plt.tight_layout()
-    plt.savefig('temperature_analysis.png', dpi=300, bbox_inches='tight')
+    # Create title with better spacing
+    title = 'Maximum Temperature Analysis for Johannesburg'
+    subtitle = 'Historical (1979-1989) vs Current (2015-2024) vs Projected (2045-2055)'
+    location = 'Location: Rahima Moosa Mother and Child Hospital (-26.1752°S, 28.0183°E)'
+    
+    fig.text(0.5, 0.98, title, fontsize=14, fontweight='bold', ha='center')
+    fig.text(0.5, 0.935, subtitle, fontsize=12, ha='center')
+    fig.text(0.5, 0.89, location, fontsize=10, ha='center', style='italic')
+    
+    # Progressive plotting based on frame number
+    if frame_number >= 1:
+        sns.kdeplot(y=historical_seasonal['temperature'], ax=ax, color=historical_color,
+                    label=f'Historical (1979-1989) (Mean: {historical_mean:.1f}°C)',
+                    fill=True, alpha=0.3)
+    
+    if frame_number >= 2:
+        sns.kdeplot(y=current_seasonal['temperature'], ax=ax, color=current_color,
+                    label=f'Current (2015-2024) (Mean: {current_mean:.1f}°C)',
+                    fill=True, alpha=0.3)
+        # Add first temperature change annotation
+        temp_change_current = current_mean - historical_mean
+        x_pos = ax.get_xlim()[1] * 0.85
+        y_pos_current = (historical_mean + current_mean) / 2
+        ax.text(x_pos, y_pos_current, f'+{temp_change_current:.1f}°C',
+                color=current_color, ha='left', va='center', fontweight='bold')
+    
+    if frame_number >= 3:
+        sns.kdeplot(y=projected_seasonal['temperature'], ax=ax, color=projected_color,
+                    label=f'Projected (2045-2055) (Mean: {projected_mean:.1f}°C)',
+                    fill=True, alpha=0.3)
+        # Add second temperature change annotation
+        temp_change_projected = projected_mean - current_mean
+        y_pos_projected = (current_mean + projected_mean) / 2
+        ax.text(x_pos, y_pos_projected, f'+{temp_change_projected:.1f}°C',
+                color=projected_color, ha='left', va='center', fontweight='bold')
+    
+    # Customize axis
+    ax.set_ylabel('Maximum Temperature (°C)')
+    ax.set_xlabel('Frequency')
+    ax.set_xticks([])
+    ax.set_yticks(np.arange(25, 41, 1))
+    ax.grid(True, axis='y', alpha=0.3, linestyle='--')
+    
+    # Update the legend order to match visual order (historical at bottom, projected at top)
+    handles = [patches.Patch(color=projected_color), 
+              patches.Patch(color=current_color),
+              patches.Patch(color=historical_color)]
+    labels = ['Projected', 'Current', 'Historical']
+    ax.legend(handles, labels, loc='upper left')
+    
+    # Save frame
+    plt.savefig(os.path.join(temp_folder, f'frame_{frame_number}.png'), 
+                dpi=300, bbox_inches='tight')
     plt.close()
 
-def plot_seasonal_kde(ax, historical_dfs, current_df, projection_dfs, months,
-                     historical_color, current_color, projected_color):
-    """Plot seasonal data using KDE for a specific set of months."""
+def create_time_series_plot(historical_dfs, current_df, projection_dfs):
+    """
+    Create a time series plot showing temperature trends across historical, current, and projected periods.
+    Shows only spring and summer months for consistency with the density plot.
+    """
+    # Define spring and summer months (September to February in Southern Hemisphere)
+    spring_summer_months = [9, 10, 11, 12, 1, 2]
     
-    # Filter and plot historical data
-    historical_seasonal = pd.concat([df[df['month'].isin(months)] for df in historical_dfs.values()])
-    historical_mean = historical_seasonal['temperature'].mean()
+    # Prepare data with seasonal filtering
+    historical_temps = historical_dfs[historical_dfs['month'].isin(spring_summer_months)]['temperature']
+    current_temps = current_df[current_df['month'].isin(spring_summer_months)]['temperature']
+    projected_temps = projection_dfs[projection_dfs['month'].isin(spring_summer_months)]['temperature']
     
-    # Plot historical KDE
-    sns.kdeplot(data=historical_seasonal['temperature'], ax=ax, color=historical_color,
-                label=f'Historical (1979-1989) (Mean: {historical_mean:.1f}°C)',
-                linewidth=2)
+    # Create categories and combine data
+    data = pd.DataFrame({
+        'Period': ['Historical'] * len(historical_temps) + 
+                 ['Current'] * len(current_temps) + 
+                 ['Projected'] * len(projected_temps),
+        'Temperature': pd.concat([historical_temps, current_temps, projected_temps])
+    })
     
-    # Fill under historical KDE curve
-    line = ax.lines[-1]
-    x, y = line.get_data()
-    ax.fill_between(x, 0, y, color=historical_color, alpha=0.2)
+    # Calculate means for each period
+    means = data.groupby('Period')['Temperature'].mean().reindex(['Historical', 'Current', 'Projected'])
     
-    # Filter and plot current data
-    current_seasonal = current_df[current_df['month'].isin(months)]
-    current_mean = current_seasonal['temperature'].mean()
+    # Set style
+    plt.style.use('seaborn-v0_8-paper')
     
-    # Plot current KDE
-    sns.kdeplot(data=current_seasonal['temperature'], ax=ax, color=current_color,
-                label=f'Current (2015-2024) (Mean: {current_mean:.1f}°C)',
-                linewidth=2)
+    # Create the plot with specific figure size and higher DPI
+    fig, ax = plt.subplots(figsize=(12, 8), dpi=300)
     
-    # Fill under current KDE curve
-    line = ax.lines[-1]
-    x, y = line.get_data()
-    ax.fill_between(x, 0, y, color=current_color, alpha=0.2)
+    # Custom colors for mean line and points
+    mean_color = '#E74C3C'   # Bright red for means
     
-    # Filter and plot projection data
-    projection_seasonal = pd.concat([df[df['month'].isin(months)] for df in projection_dfs.values()])
-    projection_mean = projection_seasonal['temperature'].mean()
+    # Create scatter plot with temperature-based colors
+    for period_idx, period in enumerate(['Historical', 'Current', 'Projected']):
+        period_data = data[data['Period'] == period]
+        temperatures = period_data['Temperature']
+        
+        # Add small random jitter to x positions
+        x_jittered = np.random.normal(period_idx, 0.1, size=len(temperatures))
+        
+        # Create scatter plot with temperature-based colors
+        scatter = plt.scatter(x_jittered, temperatures, 
+                            c=temperatures, cmap='RdYlBu_r',
+                            alpha=0.6, s=30)
     
-    # Plot projection KDE
-    sns.kdeplot(data=projection_seasonal['temperature'], ax=ax, color=projected_color,
-                label=f'Projected (2045-2055) (Mean: {projection_mean:.1f}°C)',
-                linewidth=2)
+    # Plot means and connect them with a line
+    plt.plot(range(3), means.values, 'o-', 
+            color=mean_color, 
+            markersize=12, linewidth=2.5,
+            label='Mean Maximum Temperature',
+            zorder=5)  # Ensure means are plotted on top
     
-    # Fill under projection KDE curve
-    line = ax.lines[-1]
-    x, y = line.get_data()
-    ax.fill_between(x, 0, y, color=projected_color, alpha=0.2)
+    # Add mean values as text annotations
+    for i, mean in enumerate(means):
+        plt.annotate(f'{mean:.1f}°C',
+                    xy=(i, mean),
+                    xytext=(0, 10), textcoords='offset points',
+                    ha='center', va='bottom',
+                    color=mean_color,
+                    fontweight='bold')
     
-    # Add temperature change annotations
-    y_pos = ax.get_ylim()[1] * 0.8
-    ax.annotate(f'+{current_mean - historical_mean:.1f}°C',
-                xy=(historical_mean + 1, y_pos),
-                xytext=(current_mean - 1, y_pos),
-                arrowprops=dict(arrowstyle='<->', color='gray'),
-                ha='center', va='bottom', fontsize=10)
+    # Create title with better spacing
+    title = 'Maximum Temperature Trends Across Time Periods\n(Spring & Summer Months)'
+    subtitle = 'Historical (1979-1989) vs Current (2015-2024) vs Projected (2045-2055)'
+    location = 'Location: Rahima Moosa Mother and Child Hospital (-26.1752°S, 28.0183°E)'
+    data_source = 'Data Sources: ERA5 (Historical & Current), CMIP6 SSP5-8.5 (Projected)'
     
-    ax.annotate(f'+{projection_mean - current_mean:.1f}°C',
-                xy=(current_mean + 1, y_pos),
-                xytext=(projection_mean - 1, y_pos),
-                arrowprops=dict(arrowstyle='<->', color='gray'),
-                ha='center', va='bottom', fontsize=10)
+    # Add titles and labels
+    plt.title(title + '\n' + subtitle + '\n' + location, 
+             pad=20, fontsize=14, fontweight='bold')
+    plt.xlabel('Time Period', fontsize=12, labelpad=10)
+    plt.ylabel('Maximum Temperature (°C)', fontsize=12, labelpad=10)
+    
+    # Set x-axis ticks
+    plt.xticks(range(3), ['Historical', 'Current', 'Projected'])
+    
+    # Add colorbar
+    cbar = plt.colorbar(scatter)
+    cbar.set_label('Maximum Temperature (°C)', fontsize=10)
+    
+    # Customize grid
+    ax.grid(True, axis='y', linestyle='--', alpha=0.3)
+    ax.set_axisbelow(True)  # Put grid behind points
+    
+    # Customize spines
+    ax.spines['top'].set_visible(False)
+    ax.spines['right'].set_visible(False)
+    ax.spines['left'].set_linewidth(0.5)
+    ax.spines['bottom'].set_linewidth(0.5)
+    
+    # Add legend
+    plt.legend(['Mean Maximum Temperature'], 
+              loc='upper left', 
+              frameon=True, 
+              framealpha=0.9,
+              edgecolor='none')
+    
+    # Add data source at the bottom
+    plt.figtext(0.02, -0.05, data_source, fontsize=10, style='italic')
+    
+    # Adjust layout and save
+    plt.tight_layout()
+    plt.savefig('temperature_trends.png', dpi=300, bbox_inches='tight', pad_inches=0.2)
+    plt.close()
+
+def create_animated_visualization(historical_dfs, current_df, projection_dfs):
+    """Create an animated visualization showing progressive warming."""
+    print("\nCreating animated visualization...")
+    
+    # Create temporary folder for frames
+    temp_folder = 'temp_frames'
+    os.makedirs(temp_folder, exist_ok=True)
+    
+    # Create frames
+    spring_summer_months = [9, 10, 11, 12, 1, 2]
+    for frame in range(1, 5):  # 4 frames: empty, historical, current, projected
+        create_frame(historical_dfs, current_df, projection_dfs, 
+                    spring_summer_months, frame, temp_folder)
+    
+    # Create GIF
+    frames = []
+    for frame in range(1, 5):
+        frame_path = os.path.join(temp_folder, f'frame_{frame}.png')
+        frames.append(imageio.imread(frame_path))
+    
+    # Save with much longer durations for each frame
+    durations = [8.0, 8.0, 8.0, 12.0]  # Much longer durations: 8 seconds per transition, 12 seconds for final
+    imageio.mimsave('temperature_analysis.gif', frames, duration=durations, loop=0)
+    
+    # Clean up temporary files
+    for frame in range(1, 5):
+        os.remove(os.path.join(temp_folder, f'frame_{frame}.png'))
+    os.rmdir(temp_folder)
+    
+    print("Animation complete! Check 'temperature_analysis.gif' for results.")
 
 if __name__ == "__main__":
     print("=== Analyzing Johannesburg Temperature Data ===")
     
-    # Historical data (1979-1989)
-    print("\nFetching Historical Data...")
-    historical_dfs = {}
-    historical_data = get_data_for_period(1979, 1989, JOBURG_AREA, 'ERA5')
-    if historical_data is not None:
-        historical_dfs['1979-1989'] = historical_data
+    cache_file = 'temperature_data_cache.pkl'
+    cached_data = load_cached_data(cache_file)
     
-    # Current data (2015-2024)
-    print("\nFetching Current Data...")
-    current_df = get_data_for_period(2015, 2024, JOBURG_AREA, 'ERA5')
+    if cached_data is None:
+        # Fetch all data if not cached
+        print("\nFetching Historical Data...")
+        historical_dfs = {}
+        historical_data = get_data_for_period(1979, 1989, JOBURG_AREA)
+        if historical_data is not None:
+            historical_dfs['1979-1989'] = historical_data
+            
+        print("\nFetching Current Data...")
+        current_df = get_data_for_period(2015, 2024, JOBURG_AREA)
+        
+        print("\nFetching Future Projections...")
+        projection_dfs = {}
+        projection_data = get_data_for_period(2045, 2055, JOBURG_AREA, dataset='CMIP6', scenario='ssp585')
+        if projection_data is not None:
+            projection_dfs['2045-2055'] = projection_data
+        
+        # Save to cache
+        cached_data = {
+            'historical': historical_dfs,
+            'current': current_df,
+            'projected': projection_dfs
+        }
+        save_to_cache(cached_data, cache_file)
+    else:
+        historical_dfs = cached_data['historical']
+        current_df = cached_data['current']
+        projection_dfs = cached_data['projected']
+
+    # Create the animated visualization
+    create_animated_visualization(historical_dfs, current_df, projection_dfs)
     
-    # Future projections (2045-2055)
-    print("\nFetching Future Projections...")
-    projection_dfs = {}
-    projection_data = get_data_for_period(2045, 2055, JOBURG_AREA, 'CMIP6', scenario='ssp585')
-    if projection_data is not None:
-        projection_dfs['2045-2055 (SSP5-8.5)'] = projection_data
-    
-    # Create the plot if we have data
-    if current_df is not None:
-        print("\nCreating visualization...")
-        create_comparison_plot(historical_dfs, current_df, projection_dfs)
-        print("Analysis complete! Check 'temperature_analysis.png' for results.")
+    # Create the new time series plot
+    create_time_series_plot(historical_dfs, current_df, projection_dfs)
+    print("\nCreated time series plot: temperature_trends.png")
