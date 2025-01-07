@@ -197,7 +197,7 @@ def create_frame(historical_dfs, current_df, projection_dfs, spring_summer_month
     
     # Create title with better spacing
     title = 'Maximum Temperature Analysis for Johannesburg'
-    subtitle = 'Historical (1979-1989) vs Current (2015-2024) vs Projected (2045-2055)'
+    subtitle = 'Historical (1980-1989) vs Current (2015-2024) vs Projected (2045-2055)'
     location = 'Location: Rahima Moosa Mother and Child Hospital (-26.1752°S, 28.0183°E)'
     
     fig.text(0.5, 0.98, title, fontsize=14, fontweight='bold', ha='center')
@@ -207,7 +207,7 @@ def create_frame(historical_dfs, current_df, projection_dfs, spring_summer_month
     # Progressive plotting based on frame number
     if frame_number >= 1:
         sns.kdeplot(y=historical_seasonal['temperature'], ax=ax, color=historical_color,
-                    label=f'Historical (1979-1989) (Mean: {historical_mean:.1f}°C)',
+                    label=f'Historical (1980-1989) (Mean: {historical_mean:.1f}°C)',
                     fill=True, alpha=0.3)
     
     if frame_number >= 2:
@@ -255,13 +255,28 @@ def create_time_series_plot(historical_dfs, current_df, projection_dfs):
     Create a time series plot showing temperature trends across historical, current, and projected periods.
     Shows only spring and summer months for consistency with the density plot.
     """
+    plt.style.use('default')
+    fig = plt.figure(figsize=(12, 8))
+    
     # Define spring and summer months (September to February in Southern Hemisphere)
     spring_summer_months = [9, 10, 11, 12, 1, 2]
     
-    # Prepare data with seasonal filtering
-    historical_temps = historical_dfs[historical_dfs['month'].isin(spring_summer_months)]['temperature']
+    # Process historical data
+    if isinstance(historical_dfs, dict) and historical_dfs:
+        historical_data = pd.concat(historical_dfs.values())
+        historical_temps = historical_data[historical_data['month'].isin(spring_summer_months)]['temperature']
+    else:
+        historical_temps = historical_dfs[historical_dfs['month'].isin(spring_summer_months)]['temperature']
+    
+    # Process current data
     current_temps = current_df[current_df['month'].isin(spring_summer_months)]['temperature']
-    projected_temps = projection_dfs[projection_dfs['month'].isin(spring_summer_months)]['temperature']
+    
+    # Process projection data
+    if isinstance(projection_dfs, dict) and projection_dfs:
+        projection_data = pd.concat(projection_dfs.values())
+        projected_temps = projection_data[projection_data['month'].isin(spring_summer_months)]['temperature']
+    else:
+        projected_temps = projection_dfs[projection_dfs['month'].isin(spring_summer_months)]['temperature']
     
     # Create categories and combine data
     data = pd.DataFrame({
@@ -273,12 +288,6 @@ def create_time_series_plot(historical_dfs, current_df, projection_dfs):
     
     # Calculate means for each period
     means = data.groupby('Period')['Temperature'].mean().reindex(['Historical', 'Current', 'Projected'])
-    
-    # Set style
-    plt.style.use('seaborn-v0_8-paper')
-    
-    # Create the plot with specific figure size and higher DPI
-    fig, ax = plt.subplots(figsize=(12, 8), dpi=300)
     
     # Custom colors for mean line and points
     mean_color = '#E74C3C'   # Bright red for means
@@ -314,7 +323,7 @@ def create_time_series_plot(historical_dfs, current_df, projection_dfs):
     
     # Create title with better spacing
     title = 'Maximum Temperature Trends Across Time Periods\n(Spring & Summer Months)'
-    subtitle = 'Historical (1979-1989) vs Current (2015-2024) vs Projected (2045-2055)'
+    subtitle = 'Historical (1980-1989) vs Current (2015-2024) vs Projected (2045-2055)'
     location = 'Location: Rahima Moosa Mother and Child Hospital (-26.1752°S, 28.0183°E)'
     data_source = 'Data Sources: ERA5 (Historical & Current), CMIP6 SSP5-8.5 (Projected)'
     
@@ -332,14 +341,14 @@ def create_time_series_plot(historical_dfs, current_df, projection_dfs):
     cbar.set_label('Maximum Temperature (°C)', fontsize=10)
     
     # Customize grid
-    ax.grid(True, axis='y', linestyle='--', alpha=0.3)
-    ax.set_axisbelow(True)  # Put grid behind points
+    plt.grid(True, axis='y', linestyle='--', alpha=0.3)
+    plt.gca().set_axisbelow(True)  # Put grid behind points
     
     # Customize spines
-    ax.spines['top'].set_visible(False)
-    ax.spines['right'].set_visible(False)
-    ax.spines['left'].set_linewidth(0.5)
-    ax.spines['bottom'].set_linewidth(0.5)
+    plt.gca().spines['top'].set_visible(False)
+    plt.gca().spines['right'].set_visible(False)
+    plt.gca().spines['left'].set_linewidth(0.5)
+    plt.gca().spines['bottom'].set_linewidth(0.5)
     
     # Add legend
     plt.legend(['Mean Maximum Temperature'], 
@@ -397,9 +406,9 @@ if __name__ == "__main__":
         # Fetch all data if not cached
         print("\nFetching Historical Data...")
         historical_dfs = {}
-        historical_data = get_data_for_period(1979, 1989, JOBURG_AREA)
+        historical_data = get_data_for_period(1980, 1989, JOBURG_AREA)
         if historical_data is not None:
-            historical_dfs['1979-1989'] = historical_data
+            historical_dfs['1980-1989'] = historical_data
             
         print("\nFetching Current Data...")
         current_df = get_data_for_period(2015, 2024, JOBURG_AREA)
