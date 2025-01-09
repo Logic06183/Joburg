@@ -149,12 +149,103 @@
             color: #666;
             margin-top: 40px;
         }
+        .institutional-links {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 40px;
+            margin: 40px 0;
+            flex-wrap: wrap;
+        }
+        .institutional-links a {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            color: #2c3e50;
+            transition: transform 0.2s;
+        }
+        .institutional-links a:hover {
+            transform: scale(1.05);
+        }
+        .institutional-links img {
+            height: 80px;
+            width: auto;
+            margin-bottom: 10px;
+        }
+        .profile-section {
+            display: flex;
+            align-items: center;
+            gap: 30px;
+            margin: 20px 0;
+            padding: 20px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .profile-image {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+        .profile-info {
+            flex: 1;
+        }
+        .profile-info h3 {
+            margin: 0 0 10px 0;
+            color: #2c3e50;
+        }
+        .profile-links {
+            margin-top: 15px;
+        }
+        .profile-links a {
+            display: inline-block;
+            margin-right: 15px;
+            color: #3498db;
+            text-decoration: underline;
+        }
+        .contact-section {
+            background: #f8f9fa;
+            padding: 30px;
+            border-radius: 12px;
+            margin: 40px 0;
+            text-align: center;
+        }
+        .contact-section h2 {
+            margin-bottom: 20px;
+        }
+        .contact-section a {
+            color: #3498db;
+            text-decoration: underline;
+        }
     </style>
 </head>
 <body>
+    <div class="institutional-links">
+        <a href="https://www.witsphr.org/" target="_blank">
+            <img src="https://brandfetch.com/wits.ac.za/wits-phr-logo.png" alt="Wits PHR Logo">
+            <span>Wits Planetary Health Research</span>
+        </a>
+        <a href="https://www.wits.ac.za/" target="_blank">
+            <img src="https://mighealth-au-eu.org/wits-logo-transparent-background-14/" alt="Wits University Logo">
+            <span>University of the Witwatersrand</span>
+        </a>
+    </div>
+
     <div class="developer-info">
-        <h2>Wits Planetary Health Research Project</h2>
-        <p>These visualizations were developed by Craig Parker for the Wits Planetary Health Research initiative, focusing on the environmental health impacts around Rahima Moosa Mother and Child Hospital. This work combines satellite data analysis, climate science, and public health research to understand the relationship between urban heat patterns and maternal health outcomes in Johannesburg.</p>
+        <div class="profile-section">
+            <img src="profile-placeholder.jpg" alt="Craig Parker" class="profile-image">
+            <div class="profile-info">
+                <h3>Craig Parker</h3>
+                <p>Data Scientist and Researcher at Wits Planetary Health Research</p>
+                <div class="profile-links">
+                    <a href="https://dsi-africa.org/dsi-4th-consortium-meeting/biography/232" target="_blank">DS-I Africa Profile</a>
+                    <a href="https://dsi-africa.org/dsi-3rd-consortium-meeting/biography/1053" target="_blank">Research Biography</a>
+                </div>
+            </div>
+        </div>
+        <p>These visualizations were developed for the Wits Planetary Health Research initiative, focusing on the environmental health impacts around Rahima Moosa Mother and Child Hospital. This work combines satellite data analysis, climate science, and public health research to understand the relationship between urban heat patterns and maternal health outcomes in Johannesburg.</p>
     </div>
 
     <h1>Environmental and Health Visualizations<br>Rahima Moosa Hospital Study</h1>
@@ -332,9 +423,16 @@
         </div>
     </section>
 
+    <div class="contact-section">
+        <h2>Contact Information</h2>
+        <p>For inquiries about this research or collaboration opportunities, please visit:</p>
+        <p><a href="https://www.witsphr.org/contact.html" target="_blank">Wits Planetary Health Research Contact Page</a></p>
+    </div>
+
     <footer>
         <p> 2025 Wits Planetary Health Research. Developed by Craig Parker.<br>
-        For inquiries about this research, please contact the Wits Planetary Health team.</p>
+        A collaboration between <a href="https://www.witsphr.org/" target="_blank">Wits Planetary Health Research</a> and 
+        <a href="https://www.wits.ac.za/" target="_blank">University of the Witwatersrand</a></p>
     </footer>
 </body>
 </html>
