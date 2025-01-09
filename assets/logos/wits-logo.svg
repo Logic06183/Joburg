@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 100">
+  <path fill="#003366" d="M40,20 h120 v60 h-120 z"/>
+  <text x="100" y="55" fill="white" font-family="Arial" font-size="14" text-anchor="middle">University of the</text>
+  <text x="100" y="70" fill="white" font-family="Arial" font-size="14" text-anchor="middle">Witwatersrand</text>
+</svg>
