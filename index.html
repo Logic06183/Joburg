@@ -479,6 +479,180 @@
         .dark-mode .key-visualization-caption {
             color: #f5f5f5;
         }
+        
+        /* Temperature Analysis Styling */
+        .temperature-analysis {
+            margin: 3rem 0;
+        }
+        
+        .analysis-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+        
+        .analysis-card {
+            background: #fff;
+            border-radius: 15px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .analysis-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+        
+        .analysis-card img {
+            width: 100%;
+            height: auto;
+            border-radius: 10px;
+            margin-bottom: 1rem;
+        }
+        
+        .analysis-card h3 {
+            color: #2c3e50;
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+        }
+        
+        .analysis-card p {
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+        
+        .analysis-card .expand-text {
+            color: #3498db;
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.9);
+            z-index: 1000;
+            padding: 2rem;
+            overflow-y: auto;
+        }
+        
+        .modal-content {
+            max-width: 90%;
+            max-height: 90vh;
+            margin: 2rem auto;
+            position: relative;
+        }
+        
+        .modal img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 0 auto;
+        }
+        
+        .modal-close {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            color: white;
+            font-size: 2rem;
+            cursor: pointer;
+            z-index: 1001;
+        }
+        
+        .dark-mode .analysis-card {
+            background: #2d2d2d;
+        }
+        
+        .dark-mode .analysis-card h3 {
+            color: #f5f5f5;
+        }
+        
+        .dark-mode .analysis-card p {
+            color: #ccc;
+        }
+        
+        /* Developer Section Styling */
+        .developer-section {
+            background: linear-gradient(135deg, #2c3e50, #3498db);
+            color: white;
+            padding: 3rem 2rem;
+            margin: 3rem 0;
+            border-radius: 15px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.1);
+        }
+        
+        .developer-profile {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .developer-image {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid white;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+        
+        .developer-info {
+            flex: 1;
+        }
+        
+        .developer-info h2 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            color: white;
+        }
+        
+        .developer-info p {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            margin-bottom: 1rem;
+            color: rgba(255,255,255,0.9);
+        }
+        
+        .developer-logos {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            margin-top: 1.5rem;
+        }
+        
+        .developer-logos img {
+            height: 50px;
+            width: auto;
+            filter: brightness(0) invert(1);
+            opacity: 0.9;
+            transition: opacity 0.3s ease;
+        }
+        
+        .developer-logos img:hover {
+            opacity: 1;
+        }
+        
+        @media (max-width: 768px) {
+            .developer-profile {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .developer-logos {
+                justify-content: center;
+            }
+        }
     </style>
 </head>
 <body>
@@ -514,9 +688,19 @@
         </p>
     </div>
 
-    <div class="developer-info">
-        <h2>Environmental Health Impact Analysis</h2>
-        <p>Exploring the relationship between environmental factors and health outcomes at Rahima Moosa Hospital</p>
+    <div class="developer-section">
+        <div class="developer-profile">
+            <img src="assets/logos/Craig Parker.jpg" alt="Craig Parker" class="developer-image">
+            <div class="developer-info">
+                <h2>About the Developer</h2>
+                <p>Hi, I'm Craig Parker, a Data Scientist and Researcher at Wits Planetary Health Research. I specialize in environmental data analysis and visualization, focusing on the intersection of climate change and public health.</p>
+                <p>These visualizations were developed as part of our research into temperature patterns and their health impacts around Rahima Moosa Mother and Child Hospital. The analysis combines satellite data, statistical modeling, and interactive visualization techniques to make complex climate data more accessible and meaningful.</p>
+                <div class="developer-logos">
+                    <img src="assets/logos/idori.png" alt="iDORI Logo" title="iDORI - Innovative Digital Open Research Initiative">
+                    <img src="assets/logos/WitsPHR.jpeg" alt="Wits PHR Logo" title="Wits Planetary Health Research">
+                </div>
+            </div>
+        </div>
     </div>
 
     <section id="about" class="section">
@@ -532,22 +716,20 @@
         </div>
     </section>
 
-    <section id="temperature-analysis" class="section">
+    <section id="temperature-analysis" class="section temperature-analysis">
         <h2>Temperature Analysis</h2>
-        <div class="grid">
-            <div class="card">
-                <img src="seasonal_analysis_improved.png" alt="Seasonal Analysis">
-                <div class="card-content">
-                    <h3>Seasonal Patterns</h3>
-                    <p>Analysis of seasonal temperature variations and their potential health impacts.</p>
-                </div>
+        <div class="analysis-grid">
+            <div class="analysis-card" onclick="openModal('distribution-modal')">
+                <img src="temperature_distributions.png" alt="Temperature Distribution Analysis">
+                <h3>Temperature Distribution Patterns</h3>
+                <p>Statistical analysis showing the shift in temperature distributions over different periods. The graphs demonstrate a clear rightward shift (+2.0°C) in temperature patterns, indicating significant warming trends in the Johannesburg area.</p>
+                <p class="expand-text">Click to enlarge →</p>
             </div>
-            <div class="card">
-                <img src="temperature_distributions.png" alt="Temperature Distributions">
-                <div class="card-content">
-                    <h3>Temperature Distributions</h3>
-                    <p>Statistical distribution of temperature measurements across different periods.</p>
-                </div>
+            <div class="analysis-card" onclick="openModal('comprehensive-modal')">
+                <img src="temperature_analysis.gif" alt="Comprehensive Temperature Analysis" style="animation-duration: 8s">
+                <h3>Historical vs Projected Temperatures</h3>
+                <p>Multi-faceted visualization comparing historical (1980-1989), current (2015-2024), and projected (2045-2055) temperature patterns at Rahima Moosa Hospital. The analysis reveals a consistent warming trend with significant implications for future climate conditions.</p>
+                <p class="expand-text">Click to enlarge →</p>
             </div>
         </div>
     </section>
@@ -644,6 +826,21 @@
         </div>
     </section>
 
+    <!-- Modals -->
+    <div id="distribution-modal" class="modal">
+        <span class="modal-close" onclick="closeModal('distribution-modal')">&times;</span>
+        <div class="modal-content">
+            <img src="temperature_distributions.png" alt="Temperature Distribution Analysis">
+        </div>
+    </div>
+
+    <div id="comprehensive-modal" class="modal">
+        <span class="modal-close" onclick="closeModal('comprehensive-modal')">&times;</span>
+        <div class="modal-content">
+            <img src="temperature_analysis.gif" alt="Comprehensive Temperature Analysis" style="animation-duration: 8s">
+        </div>
+    </div>
+
     <footer>
         <p> 2024 Wits Planetary Health Research. All rights reserved.</p>
     </footer>
@@ -660,6 +857,24 @@
         
         function toggleTheme() {
             document.body.classList.toggle('dark-mode');
+        }
+        
+        function openModal(modalId) {
+            document.getElementById(modalId).style.display = 'block';
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+
+        // Close modal when clicking outside the image
+        window.onclick = function(event) {
+            if (event.target.classList.contains('modal')) {
+                event.target.style.display = 'none';
+                document.body.style.overflow = 'auto';
+            }
         }
     </script>
 </body>
