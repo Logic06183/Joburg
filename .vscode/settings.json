@@ -1,0 +1,4 @@
+{
+    "extensions.experimental.useOpenVSX": true,
+    "workbench.extensionManagement.useOpenVSX": true
+}
