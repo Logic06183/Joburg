@@ -436,6 +436,49 @@
         .dark-mode .map-links a:hover {
             background: #3498db;
         }
+        
+        /* Key Visualization Styling */
+        .key-visualization {
+            margin: 2rem 0;
+            padding: 2rem;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e8ecf1 100%);
+            border-radius: 15px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .key-visualization:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 40px rgba(0,0,0,0.15);
+        }
+        
+        .key-visualization img {
+            width: 100%;
+            max-width: 1200px;
+            height: auto;
+            border-radius: 10px;
+            margin: 0 auto;
+            display: block;
+        }
+        
+        .key-visualization-caption {
+            margin-top: 1.5rem;
+            text-align: center;
+            font-size: 1.1rem;
+            color: #2c3e50;
+            line-height: 1.6;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .dark-mode .key-visualization {
+            background: linear-gradient(135deg, #2d2d2d 0%, #1a1a1a 100%);
+        }
+        
+        .dark-mode .key-visualization-caption {
+            color: #f5f5f5;
+        }
     </style>
 </head>
 <body>
@@ -462,9 +505,18 @@
         </a>
     </div>
 
+    <div class="key-visualization">
+        <img src="temperature_trends.png" alt="Temperature Trends in Johannesburg">
+        <p class="key-visualization-caption">
+            Long-term temperature trends in Johannesburg showing significant warming patterns over the past decades. 
+            This visualization demonstrates the clear impact of climate change on local temperatures, 
+            with potential implications for public health and urban planning.
+        </p>
+    </div>
+
     <div class="developer-info">
         <h2>Environmental Health Impact Analysis</h2>
-        <p>Exploring the relationship between environmental factors and health outcomes at Rahima Moosa Mother and Child Hospital</p>
+        <p>Exploring the relationship between environmental factors and health outcomes at Rahima Moosa Hospital</p>
     </div>
 
     <section id="about" class="section">
