@@ -1,79 +1,262 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Temperature Maps - Rahima Moosa Hospital</title>
+    <title>Environmental and Health Visualizations - Rahima Moosa Hospital</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            max-width: 800px;
+            max-width: 1200px;
             margin: 0 auto;
             padding: 20px;
             background-color: #f5f5f5;
         }
-        .map-list {
+        .section {
             background: white;
             padding: 20px;
             border-radius: 8px;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+        h1, h2 {
+            color: #2c3e50;
         }
         h1 {
-            color: #2c3e50;
             text-align: center;
+            margin-bottom: 40px;
         }
-        ul {
-            list-style: none;
-            padding: 0;
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
         }
-        li {
-            margin: 10px 0;
-            padding: 10px;
+        .card {
             background: #f8f9fa;
-            border-radius: 4px;
-            transition: background-color 0.2s;
+            border-radius: 8px;
+            overflow: hidden;
+            transition: transform 0.2s;
         }
-        li:hover {
-            background: #e9ecef;
+        .card:hover {
+            transform: translateY(-5px);
         }
-        a {
+        .card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+        .card-content {
+            padding: 15px;
+        }
+        .card h3 {
+            margin: 0;
             color: #2c3e50;
-            text-decoration: none;
-            display: block;
         }
-        a:hover {
-            color: #1a252f;
-        }
-        .description {
+        .card p {
             color: #666;
             font-size: 0.9em;
-            margin-top: 5px;
+            margin-top: 10px;
+        }
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+        .nav {
+            position: sticky;
+            top: 0;
+            background: #fff;
+            padding: 10px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .nav ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+        }
+        .nav a {
+            color: #2c3e50;
+            padding: 5px 10px;
+            border-radius: 4px;
+        }
+        .nav a:hover {
+            background: #f8f9fa;
         }
     </style>
 </head>
 <body>
-    <h1>Temperature Maps - Rahima Moosa Hospital</h1>
-    <div class="map-list">
+    <h1>Environmental and Health Visualizations<br>Rahima Moosa Hospital Study</h1>
+    
+    <nav class="nav">
         <ul>
-            <li>
-                <a href="lst_map_1980_1995.html">Historical Temperature Map (1980-1995)</a>
-                <div class="description">Early historical temperature patterns around the hospital</div>
-            </li>
-            <li>
-                <a href="lst_map_1990_1999.html">Temperature Map (1990-1999)</a>
-                <div class="description">Temperature patterns in the 1990s</div>
-            </li>
-            <li>
-                <a href="lst_map_2000_2009.html">Temperature Map (2000-2009)</a>
-                <div class="description">Temperature patterns in the 2000s</div>
-            </li>
-            <li>
-                <a href="lst_map_2010_2023.html">Recent Temperature Map (2010-2023)</a>
-                <div class="description">Recent temperature patterns</div>
-            </li>
-            <li>
-                <a href="lst_map_2020_2023.html">Current Temperature Map (2020-2023)</a>
-                <div class="description">Current temperature patterns</div>
-            </li>
+            <li><a href="#interactive-maps">Interactive Maps</a></li>
+            <li><a href="#temperature-analysis">Temperature Analysis</a></li>
+            <li><a href="#seasonal-patterns">Seasonal Patterns</a></li>
+            <li><a href="#health-analysis">Health Analysis</a></li>
+            <li><a href="#animations">Animations</a></li>
         </ul>
-    </div>
+    </nav>
+
+    <section id="interactive-maps" class="section">
+        <h2>Interactive Temperature Maps</h2>
+        <div class="grid">
+            <a href="lst_map_1980_1995.html" class="card">
+                <div class="card-content">
+                    <h3>Historical (1980-1995)</h3>
+                    <p>Early historical temperature patterns around the hospital</p>
+                </div>
+            </a>
+            <a href="lst_map_1990_1999.html" class="card">
+                <div class="card-content">
+                    <h3>1990s Period</h3>
+                    <p>Temperature patterns during the 1990s</p>
+                </div>
+            </a>
+            <a href="lst_map_2000_2009.html" class="card">
+                <div class="card-content">
+                    <h3>2000s Period</h3>
+                    <p>Temperature patterns during the 2000s</p>
+                </div>
+            </a>
+            <a href="lst_map_2010_2023.html" class="card">
+                <div class="card-content">
+                    <h3>Recent Period (2010-2023)</h3>
+                    <p>Contemporary temperature patterns</p>
+                </div>
+            </a>
+        </div>
+    </section>
+
+    <section id="temperature-analysis" class="section">
+        <h2>Temperature Analysis</h2>
+        <div class="grid">
+            <div class="card">
+                <img src="temperature_distributions.png" alt="Temperature Distributions">
+                <div class="card-content">
+                    <h3>Temperature Distributions</h3>
+                    <p>Statistical distribution of temperatures over time</p>
+                </div>
+            </div>
+            <div class="card">
+                <img src="temperature_ridges.png" alt="Temperature Ridge Plot">
+                <div class="card-content">
+                    <h3>Temperature Ridge Plot</h3>
+                    <p>Temporal evolution of temperature distributions</p>
+                </div>
+            </div>
+            <div class="card">
+                <img src="temperature_change_comparison.png" alt="Temperature Change">
+                <div class="card-content">
+                    <h3>Temperature Change Comparison</h3>
+                    <p>Analysis of temperature changes over decades</p>
+                </div>
+            </div>
+            <div class="card">
+                <img src="temperature_trends.png" alt="Temperature Trends">
+                <div class="card-content">
+                    <h3>Temperature Trends</h3>
+                    <p>Long-term temperature trend analysis</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="seasonal-patterns" class="section">
+        <h2>Seasonal Patterns</h2>
+        <div class="grid">
+            <div class="card">
+                <img src="seasonal_analysis.png" alt="Seasonal Analysis">
+                <div class="card-content">
+                    <h3>Seasonal Analysis</h3>
+                    <p>Analysis of seasonal temperature patterns</p>
+                </div>
+            </div>
+            <div class="card">
+                <img src="seasonal_comparison.png" alt="Seasonal Comparison">
+                <div class="card-content">
+                    <h3>Seasonal Comparison</h3>
+                    <p>Comparison of seasons across different periods</p>
+                </div>
+            </div>
+            <div class="card">
+                <img src="seasonal_distribution.png" alt="Seasonal Distribution">
+                <div class="card-content">
+                    <h3>Seasonal Distribution</h3>
+                    <p>Distribution of temperatures by season</p>
+                </div>
+            </div>
+            <div class="card">
+                <img src="seasonal_temp_distribution_publication.png" alt="Publication Ready Distribution">
+                <div class="card-content">
+                    <h3>Publication Ready Distribution</h3>
+                    <p>Publication-quality seasonal temperature analysis</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="health-analysis" class="section">
+        <h2>Health Analysis</h2>
+        <div class="grid">
+            <div class="card">
+                <img src="diagnosis_distribution.png" alt="Diagnosis Distribution">
+                <div class="card-content">
+                    <h3>Diagnosis Distribution</h3>
+                    <p>Distribution of medical diagnoses</p>
+                </div>
+            </div>
+            <div class="card">
+                <img src="diagnosis_distribution_grouped.png" alt="Grouped Diagnosis Distribution">
+                <div class="card-content">
+                    <h3>Grouped Diagnosis Distribution</h3>
+                    <p>Grouped analysis of medical diagnoses</p>
+                </div>
+            </div>
+            <div class="card">
+                <img src="monthly_distribution.png" alt="Monthly Distribution">
+                <div class="card-content">
+                    <h3>Monthly Distribution</h3>
+                    <p>Monthly patterns in health data</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="animations" class="section">
+        <h2>Animated Visualizations</h2>
+        <div class="grid">
+            <div class="card">
+                <img src="temperature_evolution.gif" alt="Temperature Evolution">
+                <div class="card-content">
+                    <h3>Temperature Evolution</h3>
+                    <p>Animated visualization of temperature changes</p>
+                </div>
+            </div>
+            <div class="card">
+                <img src="seasonal_pattern.gif" alt="Seasonal Pattern">
+                <div class="card-content">
+                    <h3>Seasonal Pattern</h3>
+                    <p>Animation of seasonal temperature patterns</p>
+                </div>
+            </div>
+            <div class="card">
+                <img src="temperature_distribution_animated.gif" alt="Animated Distribution">
+                <div class="card-content">
+                    <h3>Animated Distribution</h3>
+                    <p>Dynamic view of temperature distributions</p>
+                </div>
+            </div>
+            <div class="card">
+                <img src="hot_days.gif" alt="Hot Days Animation">
+                <div class="card-content">
+                    <h3>Hot Days Animation</h3>
+                    <p>Animation showing patterns of extreme heat days</p>
+                </div>
+            </div>
+        </div>
+    </section>
 </body>
 </html>
