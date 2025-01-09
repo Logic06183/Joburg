@@ -374,6 +374,68 @@
         .institutional-links img {
             animation: float 3s ease-in-out infinite;
         }
+        
+        /* Interactive Maps Styling */
+        .map-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+        
+        .map-card {
+            background: #fff;
+            border-radius: 10px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .map-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+        
+        .map-card h3 {
+            margin: 0 0 1rem 0;
+            color: #2c3e50;
+            font-size: 1.3rem;
+        }
+        
+        .map-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.8rem;
+        }
+        
+        .map-links a {
+            background: #f0f2f5;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            color: #2c3e50;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+        
+        .map-links a:hover {
+            background: #3498db;
+            color: white;
+            transform: translateY(-2px);
+        }
+        
+        .dark-mode .map-card {
+            background: #2d2d2d;
+        }
+        
+        .dark-mode .map-links a {
+            background: #3d3d3d;
+            color: #f5f5f5;
+        }
+        
+        .dark-mode .map-links a:hover {
+            background: #3498db;
+        }
     </style>
 </head>
 <body>
@@ -385,6 +447,7 @@
             <li><a href="#temperature-analysis">Temperature Analysis</a></li>
             <li><a href="#animations">Animations</a></li>
             <li><a href="#publications">Publications</a></li>
+            <li><a href="#interactive-maps">Interactive Maps</a></li>
         </ul>
     </nav>
 
@@ -480,6 +543,40 @@
                 <div class="card-content">
                     <h3>Comprehensive Analysis</h3>
                     <p>Multi-faceted animation showing various aspects of temperature analysis.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="interactive-maps" class="section">
+        <h2>Interactive Temperature Maps</h2>
+        <p>Explore detailed temperature maps for different time periods. Click on any period to view the interactive map in a new tab.</p>
+        <div class="map-grid">
+            <div class="map-card">
+                <h3>1980s - 1990s</h3>
+                <div class="map-links">
+                    <a href="lst_map_1980_1995.html" target="_blank">1980-1995</a>
+                    <a href="lst_map_1990_1995.html" target="_blank">1990-1995</a>
+                    <a href="lst_map_1990_1999.html" target="_blank">1990-1999</a>
+                </div>
+            </div>
+            <div class="map-card">
+                <h3>1995 - 2010</h3>
+                <div class="map-links">
+                    <a href="lst_map_1995_2000.html" target="_blank">1995-2000</a>
+                    <a href="lst_map_1995_2010.html" target="_blank">1995-2010</a>
+                    <a href="lst_map_2000_2005.html" target="_blank">2000-2005</a>
+                    <a href="lst_map_2000_2009.html" target="_blank">2000-2009</a>
+                    <a href="lst_map_2005_2010.html" target="_blank">2005-2010</a>
+                </div>
+            </div>
+            <div class="map-card">
+                <h3>2010 - Present</h3>
+                <div class="map-links">
+                    <a href="lst_map_2010_2023.html" target="_blank">2010-2023</a>
+                    <a href="lst_map_2014_2023.html" target="_blank">2014-2023</a>
+                    <a href="lst_map_2015_2020.html" target="_blank">2015-2020</a>
+                    <a href="lst_map_2020_2023.html" target="_blank">2020-2023</a>
                 </div>
             </div>
         </div>
