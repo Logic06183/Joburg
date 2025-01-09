@@ -16,7 +16,8 @@ import os
 import imageio.v2 as imageio
 
 # Set publication-ready style
-plt.style.use('seaborn-v0_8-paper')
+plt.style.use('seaborn')
+sns.set_palette("husl")
 plt.rcParams['font.family'] = 'Arial'
 plt.rcParams['font.size'] = 10
 plt.rcParams['axes.labelsize'] = 11
