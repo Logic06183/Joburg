@@ -219,23 +219,51 @@
             color: #3498db;
             text-decoration: underline;
         }
+        .publications {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            margin: 40px 0;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .publication-item {
+            padding: 20px;
+            border-left: 4px solid #3498db;
+            margin: 20px 0;
+            background: #f8f9fa;
+            transition: transform 0.2s;
+        }
+        .publication-item:hover {
+            transform: translateX(10px);
+        }
+        .publication-item h3 {
+            margin: 0 0 10px 0;
+            color: #2c3e50;
+        }
+        .publication-item a {
+            color: #3498db;
+            text-decoration: none;
+        }
+        .publication-item a:hover {
+            text-decoration: underline;
+        }
     </style>
 </head>
 <body>
     <div class="institutional-links">
         <a href="https://www.witsphr.org/" target="_blank">
-            <img src="assets/logos/wits-phr-logo.svg" alt="Wits PHR Logo">
+            <img src="assets/logos/WitsPHR.jpg" alt="Wits PHR Logo">
             <span>Wits Planetary Health Research</span>
         </a>
         <a href="https://www.wits.ac.za/" target="_blank">
-            <img src="assets/logos/wits-logo.svg" alt="Wits University Logo">
+            <img src="assets/logos/Witslogo.png" alt="Wits University Logo">
             <span>University of the Witwatersrand</span>
         </a>
     </div>
 
     <div class="developer-info">
         <div class="profile-section">
-            <img src="profile-placeholder.jpg" alt="Craig Parker" class="profile-image">
+            <img src="assets/logos/profile.jpeg" alt="Craig Parker" class="profile-image">
             <div class="profile-info">
                 <h3>Craig Parker</h3>
                 <p>Data Scientist and Researcher at Wits Planetary Health Research</p>
@@ -243,6 +271,14 @@
                     <a href="https://dsi-africa.org/dsi-4th-consortium-meeting/biography/232" target="_blank">DS-I Africa Profile</a>
                     <a href="https://dsi-africa.org/dsi-3rd-consortium-meeting/biography/1053" target="_blank">Research Biography</a>
                 </div>
+            </div>
+        </div>
+        <div class="publications">
+            <h2>Recent Publications</h2>
+            <div class="publication-item">
+                <h3>Temperature and mental health in a South African city: a case-crossover study</h3>
+                <p>Published in BMJ Open, 2024</p>
+                <a href="https://bmjopen.bmj.com/content/14/6/e077529" target="_blank">Read the paper →</a>
             </div>
         </div>
         <p>These visualizations were developed for the Wits Planetary Health Research initiative, focusing on the environmental health impacts around Rahima Moosa Mother and Child Hospital. This work combines satellite data analysis, climate science, and public health research to understand the relationship between urban heat patterns and maternal health outcomes in Johannesburg.</p>
