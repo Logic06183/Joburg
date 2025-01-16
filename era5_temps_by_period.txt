@@ -1,0 +1,29 @@
+
+Szabo (1989):
+Aug,14.4
+Sep,16.0
+Oct,17.8
+Nov,18.1
+Dec,20.0
+Winter-Spring change,3.7
+Spring-Summer change,1.9
+
+UCT (2013-2019):
+Aug,14.6
+Sep,18.4
+Oct,20.0
+Nov,20.8
+Dec,21.6
+Winter-Spring change,6.2
+Spring-Summer change,0.8
+
+Recent (2023-2024):
+
+All Years (1989-2024):
+Aug,13.5
+Sep,17.4
+Oct,19.2
+Nov,19.9
+Dec,20.7
+Winter-Spring change,6.4
+Spring-Summer change,0.8
