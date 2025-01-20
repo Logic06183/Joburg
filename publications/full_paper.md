@@ -357,7 +357,7 @@ Johannesburg, Environmental Health*
 
 ### Analytical Methods
 
-1.  ![](../publications/media/image2.svg){width="4.366163604549431in"
+1.  ![](media/image2.svg){width="4.366163604549431in"
     height="4.8461614173228345in"}
 
     Figure 1: Analytical Framework for Assessing Urban Heat
@@ -473,10 +473,10 @@ Johannesburg, Environmental Health*
     socio-economic factors combine to create distinct geographic risk
     patterns(Figure 2).
 
-![](../publications/media/image3.png){width="2.80045384951881in"
+![](media/image3.png){width="2.80045384951881in"
 height="2.375in"}![A
 map of a city Description automatically
-generated](../publications/media/image4.png){width="2.826388888888889in"
+generated](media/image4.png){width="2.826388888888889in"
 height="2.447121609798775in"}
 
 Figure 2: Spatial Distribution of Heat Vulnerability in Johannesburg.
@@ -519,7 +519,7 @@ highlights the multidimensional nature of heat risk.
 
 1.  
 
-![](../publications/media/image5.png){width="5.961930227471566in"
+![](media/image5.png){width="5.961930227471566in"
 height="5.02942147856518in"}
 
 Figure 3: Spatial Clustering of Heat Vulnerability in Johannesburg Based
@@ -1035,27 +1035,27 @@ medical journal, 2019. **34**(1).
 
 ### Appendix A: Additional Analysis Results
 
-![Socioeconomic Patterns](../publications/media/image6.png)
+![Socioeconomic Patterns](media/image6.png)
 
 **Figure A1**: Detailed spatial distribution of socioeconomic vulnerability indicators across Johannesburg wards, showing patterns of inequality.
 
-![Healthcare Access](../publications/media/image7.png)
+![Healthcare Access](media/image7.png)
 
 **Figure A2**: Healthcare facility access patterns and travel time isochrones, highlighting areas with limited healthcare accessibility.
 
-![Temporal Trends](../publications/media/image8.png)
+![Temporal Trends](media/image8.png)
 
 **Figure A3**: Temporal trends in vulnerability components from 2000-2020, demonstrating changes in environmental and socioeconomic factors.
 
-![Policy Framework](../publications/media/image9.png)
+![Policy Framework](media/image9.png)
 
 **Figure A4**: Proposed framework for policy interventions, integrating environmental, social, and healthcare considerations.
 
-![Implementation Strategy](../publications/media/image10.png)
+![Implementation Strategy](media/image10.png)
 
 **Figure A5**: Strategic implementation roadmap for addressing heat vulnerability through targeted interventions.
 
-![Monitoring Framework](../publications/media/image11.png)
+![Monitoring Framework](media/image11.png)
 
 **Figure A6**: Proposed monitoring and evaluation framework for tracking intervention effectiveness and vulnerability changes over time.
 
@@ -1099,10 +1099,10 @@ Vulnerability Index (HVI) and Component Factors**
     nature of heat vulnerability and the need for targeted interventions
     addressing both individual drivers and their combined impacts.
 
-    ![](../publications/media/image6.png){width="5.091532152230971in"
-    height="7.348964348206474in"}![](../publications/media/image7.png){width="5.1226859142607175in"
-    height="7.405568678915135in"}![](../publications/media/image8.png){width="5.02617125984252in"
-    height="7.25462489063867in"}![](../publications/media/image9.png){width="5.0523162729658795in"
-    height="7.292361111111111in"}![](../publications/media/image10.png){width="5.302637795275591in"
-    height="7.386700568678915in"}![](../publications/media/image11.png){width="4.901650262467192in"
+    ![](media/image6.png){width="5.091532152230971in"
+    height="7.348964348206474in"}![](media/image7.png){width="5.1226859142607175in"
+    height="7.405568678915135in"}![](media/image8.png){width="5.02617125984252in"
+    height="7.25462489063867in"}![](media/image9.png){width="5.0523162729658795in"
+    height="7.292361111111111in"}![](media/image10.png){width="5.302637795275591in"
+    height="7.386700568678915in"}![](media/image11.png){width="4.901650262467192in"
     height="7.07489501312336in"}
