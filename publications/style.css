@@ -1,21 +1,71 @@
 body {
-    max-width: 800px;
+    max-width: 1000px;
     margin: 0 auto;
     padding: 2em;
-    font-family: "Segoe UI", Arial, sans-serif;
+    font-family: "Times New Roman", Times, serif;
     line-height: 1.6;
     color: #333;
+    background: linear-gradient(45deg, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.95) 100%),
+                url("data:image/svg+xml,%3Csvg width='200' height='200' xmlns='http://www.w3.org/2000/svg'%3E%3Ctext x='50%25' y='50%25' font-family='Arial' font-size='24' fill='rgba(128,128,128,0.15)' text-anchor='middle' dominant-baseline='middle' transform='rotate(-45 100 100)'%3EPREPRINT%3C/text%3E%3C/svg%3E") repeat;
 }
 
-h1, h2, h3 {
-    color: #2c3e50;
-    margin-top: 1.5em;
+.paper-header {
+    text-align: center;
+    margin-bottom: 3em;
+    border-bottom: 2px solid #333;
+    padding-bottom: 2em;
+}
+
+.title {
+    font-size: 1.8em;
+    font-weight: bold;
+    margin-bottom: 1em;
+}
+
+.authors {
+    font-size: 1.1em;
+    margin-bottom: 1em;
+}
+
+.affiliations {
+    font-size: 0.9em;
+    margin-bottom: 2em;
+    text-align: left;
+}
+
+h1 {
+    font-size: 1.6em;
+    color: #000;
+    margin-top: 2em;
+    counter-reset: h2counter;
+}
+
+h2 {
+    font-size: 1.4em;
+    color: #000;
+    counter-reset: h3counter;
+}
+
+h2::before {
+    counter-increment: h2counter;
+    content: counter(h2counter) ". ";
+}
+
+h3 {
+    font-size: 1.2em;
+    color: #000;
+}
+
+h3::before {
+    counter-increment: h3counter;
+    content: counter(h2counter) "." counter(h3counter) ". ";
 }
 
 table {
     border-collapse: collapse;
     width: 100%;
-    margin: 1em 0;
+    margin: 1.5em 0;
+    font-size: 0.9em;
 }
 
 th, td {
@@ -26,11 +76,13 @@ th, td {
 
 th {
     background-color: #f5f5f5;
+    font-weight: bold;
 }
 
 .figure {
     margin: 2em 0;
     text-align: center;
+    page-break-inside: avoid;
 }
 
 .figure img {
@@ -41,29 +93,60 @@ th {
 .figure-caption {
     margin-top: 1em;
     font-style: italic;
+    font-size: 0.9em;
 }
 
-.affiliations {
+.abstract {
     margin: 2em 0;
+    padding: 1.5em;
+    background-color: #f8f8f8;
+    border-left: 4px solid #333;
 }
 
-.affiliations sup {
-    color: #666;
+.keywords {
+    margin: 1em 0;
+    font-style: italic;
 }
 
 .references {
     margin-top: 2em;
     border-top: 2px solid #eee;
     padding-top: 1em;
+    font-size: 0.9em;
+}
+
+.references ol {
+    padding-left: 1.5em;
+}
+
+.references li {
+    margin-bottom: 0.5em;
 }
 
 @media print {
     body {
         font-size: 12pt;
+        background: none;
     }
     
+    body::after {
+        content: "PREPRINT";
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%) rotate(-45deg);
+        font-size: 100px;
+        color: rgba(128,128,128,0.15);
+        pointer-events: none;
+        z-index: 1000;
+    }
+
     a {
         color: #000;
         text-decoration: none;
+    }
+    
+    .no-print {
+        display: none;
     }
 }
