@@ -136,3 +136,25 @@ This study provides a comprehensive assessment of urban heat vulnerability in Jo
 5. UN-Habitat. (2020). World Cities Report 2020.
 6. Revi, A., et al. (2014). Urban areas. Climate Change 2014: Impacts, Adaptation, and Vulnerability.
 7. Statistics South Africa. (2016). Community Survey 2016.
+
+## Appendices
+
+### Appendix A: Detailed Ward-Level Analysis
+
+This appendix presents detailed maps showing the top 10 most vulnerable wards across different vulnerability dimensions.
+
+![Top 10 Most Vulnerable Wards - Low Vegetation](figures/Top10_Vegetation.png)
+
+**Figure A1**: Spatial distribution of the 10 wards with lowest vegetation coverage (NDVI). These areas show particularly high risk during heat events due to limited natural cooling.
+
+![Top 10 Most Vulnerable Wards - Healthcare Access](figures/Top10_Healthcare.png)
+
+**Figure A2**: Location of the 10 wards with poorest healthcare access. These areas have the longest average travel times to nearest healthcare facilities.
+
+![Top 10 Most Vulnerable Wards - Socioeconomic](figures/Top10_Socioeconomic.png)
+
+**Figure A3**: The 10 wards with highest socioeconomic vulnerability, based on combined indicators including poverty, unemployment, and housing quality.
+
+![Top 10 Most Vulnerable Wards - Combined HVI](figures/Top10_Combined.png)
+
+**Figure A4**: Wards with highest overall Heat Vulnerability Index (HVI) scores, representing areas where environmental, socioeconomic, and healthcare access challenges intersect.
