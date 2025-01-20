@@ -350,6 +350,11 @@ class HeatWaveVisualizer:
             logger.debug("Creating figure")
             fig = go.Figure()
             
+            # Calculate summary statistics
+            hist_mean = historical_data['temperature_celsius'].mean()
+            curr_mean = current_data['temperature_celsius'].mean()
+            temp_change = curr_mean - hist_mean
+            
             # Add temperature distribution
             for data, period, color in [
                 (historical_data, '1980-1989', '#990F3D'),
@@ -357,6 +362,9 @@ class HeatWaveVisualizer:
             ]:
                 logger.debug(f"Processing {period} data")
                 temps = data['temperature_celsius'].dropna()
+                mean_temp = temps.mean()
+                std_temp = temps.std()
+                
                 logger.debug(f"Temperature range for {period}: {temps.min():.1f}°C to {temps.max():.1f}°C")
                 logger.debug(f"Number of temperature readings for {period}: {len(temps)}")
                 
@@ -368,7 +376,15 @@ class HeatWaveVisualizer:
                             nbinsx=30,
                             opacity=0.7,
                             marker_color=color,
-                            histnorm='probability'
+                            histnorm='probability',
+                            hovertemplate=(
+                                f"Period: {period}<br>" +
+                                "Temperature: %{x:.1f}°C<br>" +
+                                "Proportion: %{y:.1%}<br>" +
+                                f"Mean: {mean_temp:.1f}°C<br>" +
+                                f"Std Dev: {std_temp:.1f}°C<br>" +
+                                "<extra></extra>"
+                            )
                         )
                     )
                     logger.debug(f"Successfully added trace for {period}")
@@ -376,19 +392,35 @@ class HeatWaveVisualizer:
                     logger.error(f"Error adding trace for {period}: {str(trace_error)}")
                     raise
 
+            # Create title with key findings
+            title_text = (
+                "Temperature Distribution at Rahima Moosa Hospital<br>" +
+                "<span style='font-size: 14px;'>" +
+                "Comparison of Historical (1980-1989) vs Recent (2015-2024) Daily Maximum Temperatures<br>" +
+                f"<span style='color: {FT_COLORS['main_red']};'>" +
+                f"Mean temperature increase: {temp_change:+.1f}°C" +
+                "</span></span>"
+            )
+
             # Update layout
             logger.debug("Updating figure layout")
             try:
                 fig.update_layout(
                     title={
-                        'text': 'Heat Wave Analysis - Rahima Moosa Hospital',
+                        'text': title_text,
                         'y': 0.95,
                         'x': 0.5,
                         'xanchor': 'center',
                         'yanchor': 'top'
                     },
-                    xaxis_title='Temperature (°C)',
-                    yaxis_title='Proportion of Days',
+                    xaxis_title={
+                        'text': 'Maximum Daily Temperature (°C)',
+                        'font': {'size': 12}
+                    },
+                    yaxis_title={
+                        'text': 'Proportion of Days',
+                        'font': {'size': 12}
+                    },
                     template='plotly_white',
                     height=800,
                     width=1200,
@@ -400,9 +432,42 @@ class HeatWaveVisualizer:
                         'yanchor': 'bottom',
                         'y': 1.02,
                         'xanchor': 'right',
-                        'x': 1
-                    }
+                        'x': 1,
+                        'bgcolor': 'rgba(255, 255, 255, 0.8)',
+                        'bordercolor': FT_COLORS['axis_grey'],
+                        'borderwidth': 1
+                    },
+                    annotations=[
+                        # Source attribution
+                        {
+                            'text': (
+                                'Source: ERA5 reanalysis data (maximum daily temperature)<br>' +
+                                'Analysis shows changes in temperature distribution over 35-year period during summer and spring'
+                            ),
+                            'x': 0,
+                            'y': -0.15,
+                            'xref': 'paper',
+                            'yref': 'paper',
+                            'showarrow': False,
+                            'font': {'size': 10, 'color': FT_COLORS['mid_grey']},
+                            'align': 'left'
+                        }
+                    ],
+                    margin={'t': 100, 'b': 100}
                 )
+                
+                # Update axes for better readability
+                fig.update_xaxes(
+                    gridcolor='rgba(128,128,128,0.1)',
+                    tickfont={'size': 10},
+                    tickformat='.0f'
+                )
+                fig.update_yaxes(
+                    gridcolor='rgba(128,128,128,0.1)',
+                    tickfont={'size': 10},
+                    tickformat='.1%'
+                )
+                
                 logger.debug("Successfully updated figure layout")
             except Exception as layout_error:
                 logger.error(f"Error updating layout: {str(layout_error)}")
