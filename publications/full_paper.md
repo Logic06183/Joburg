@@ -1,245 +1,78 @@
 # Quantifying intra-urban socio-economic and environmental vulnerability to extreme heat events in Johannesburg, South Africa
 
-1.  Craig Parker¹\*, Craig Mahlasi², Tamara Govindasamy², Lebohang
-    Radebe¹, Nicholas Brian Brink¹, Christopher Jack³, Madina Doumbia⁴,
-    Etienne Kouakou⁵, Matthew Chersich^1^, Gueladio Cisse⁴, Sibusisiwe
-    Makhanya², for the HE^2^AT Center Group
+## 1. Authors
 
-## Affiliations
+Craig Parker¹*, Craig Mahlasi², Tamara Govindasamy², Lebohang Radebe¹, Nicholas Brian Brink¹, Christopher Jack³, Madina Doumbia⁴, Etienne Kouakou⁵, Matthew Chersich¹, Gueladio Cisse⁴, Sibusisiwe Makhanya², for the HE²AT Center Group
 
-1.  Wits Planetary Health Research, Faculty of Health Sciences,
-    University of the Witwatersrand, Johannesburg, South Africa
+## 2. Affiliations
 
-2.  IBM Research - Africa, South Africa
+1. Wits Planetary Health Research, Faculty of Health Sciences, University of the Witwatersrand, Johannesburg, South Africa
+2. IBM Research - Africa, South Africa
+3. Climate System Analysis Group, University of Cape Town, South Africa
+4. University Peleforo Gon Coulibaly, Côte d'Ivoire
+5. Centre Suisse de Recherches Scientifiques, Côte d'Ivoire
 
-3.  Climate System Analysis Group, University of Cape Town, South Africa
+## 3. Abstract
 
-4.  University Peleforo Gon Coulibaly, Côte d\'Ivoire
+Urban populations face increasing vulnerability to extreme heat events, particularly in rapidly urbanising Global South cities where environmental exposure intersects with socioeconomic inequality and limited healthcare access. This study quantifies heat vulnerability across Johannesburg, South Africa, by integrating high-resolution environmental data with socio-economic and health metrics across 135 urban wards. We examine how historical urban development patterns influence contemporary vulnerability distributions using principal component analysis and spatial statistics.
 
-5.  Centre Suisse de Recherches Scientifiques, Côte d\'Ivoire
+Environmental indicators (Land Surface Temperature(LST), vegetation indices, and thermal field variance) were combined with socioeconomic variables (including crowded dwellings and healthcare access) and health metrics (prevalence of chronic diseases) in a comprehensive vulnerability assessment. Principal component analysis revealed three primary dimensions explaining 56.6% (95% CI: 52.4-60.8%) of the total variance: urban heat exposure (31.5%), health status (12.8%), and socio-economic conditions (12.3%). Built-up areas showed weak but significant correlations with heat indices (ρ = 0.28, p < 0.01), while higher poverty levels demonstrated moderate positive correlations with LST (ρ = 0.41, p < 0.001).
 
-<!-- -->
+The spatial analysis identified significant clustering of vulnerability (Global Moran's I = 0.42, p < 0.001), with distinct high-vulnerability clusters in historically disadvantaged areas. Alexandra Township showed the highest combined risk (LST: 29.8°C ± 0.4°C, NDVI: 0.08 ± 0.02), with 89.2% of residents dependent on public healthcare facilities. Northern suburbs formed a significant low-vulnerability cluster (Mean HVI = 0.23 ± 0.07, p < 0.001), benefiting from greater vegetation coverage and better healthcare access.
 
-1.  The HE2AT Center Group consists of: Aakin Bobola, Abdoulaye Tall,
-    Achiri Ndikum, Adaji Aishatu, Adja Ferdinand Vanga, Admire
-    Chikandiwa, Akbar Waljee, Amy Beukes, Andrew Meme, Anna Steynor,
-    Bonnie Joubert, Brama Kone, Bruce Hewitson, Cathy Mwangi, Cherlynn
-    Dumbura, Christopher Jack, Chuansi Gao, Craig Mahlasi, Craig Parker,
-    Darshnika Lakhoo, Donrich Willem Thaldar, Duncan Mitchell, Dusty-Lee
-    Donnelly, Elizabeth Frederick, Etienne Vos, Gciniwe Dlamini Baloyi,
-    Gillian Marmelstein, Gueladio Cissé, Hendrik Hamann, Iba Dieudonné
-    Dely, Ijeoma Solarin, Ilias Maliha, Jasper Maguma, Jetina Tsvaki, Ji
-    Zhu, Khady Sall, Kimberly McAlpine, Komminist Weldemariam, Kwesi
-    Quagraine, Lebohang Radebe, Leon Mbano, Lisa, Lois Harden, Lukman
-    Abdulrauf, Madina Doumbia, Margaret Brennan, Matthew Chersich,
-    Kimberly McAllister, Nicholas Brian Brink, Nontokozo Langa, Okoue
-    Emerence, Olumuyiwa Adegun, Paul Ogendi, Peter Marsh, Peter Munyi,
-    Pierre Kloppers, Piotr Wolski, Reneilwe Satekge, Rodger Duffett,
-    Rutendo Sibanda, Ruvimbo Forget, Sabina Omar, Sibusisiwe Audrey
-    Makhanya, Stanley Luchters, and Tatenda Makanga.
+These findings demonstrate how historical planning decisions continue to shape contemporary environmental health risks, with vulnerability concentrated in areas of limited healthcare access and high extreme heat exposure. Results suggest the need for targeted interventions that address both environmental and social dimensions of heat vulnerability, particularly focusing on expanding healthcare access in identified hotspots and implementing community-scale green infrastructure in high-risk areas. This study provides an evidence-based framework for prioritising heat-resilience initiatives in rapidly urbanising Global South cities while highlighting the importance of addressing historical inequities in urban adaptation planning.
 
-## Corresponding Author
+## 4. Keywords
 
-1.  Craig Parker
+*Urban Heat Vulnerability, Spatial Analysis, Healthcare Access, Environmental Justice, Climate Adaptation, Principal Component Analysis, Johannesburg, Environmental Health*
 
-    Email: craig.parker@witsphr.org
+## 5. Statements and Declarations
 
-    Wits Planetary Health Research
+### 5.1 Acknowledgement
 
-    Faculty of Health Sciences
+The research was conducted as part of the HE²AT and Health in Africa Transdisciplinary (HEAT) Center initiative, supported by the NIH Common Fund under Award Number U54 TW 012083. We acknowledge the valuable contributions of the HE²AT Center Group, which includes researchers, collaborators, and supporting staff from partner institutions.... Their collective efforts in data sharing, technical support, and capacity building have significantly advanced this research.
 
-    University of the Witwatersrand
+We also extend our gratitude to the data owners and contributors who shared their datasets, enabling this study to integrate environmental, socioeconomic, and health metrics. Special thanks go to the Gauteng City-Region Observatory (GCRO) for providing the Quality of Life Survey data and to the United States Geological Survey for Landsat 8 satellite imagery.
 
-    7 York Road, Parktown
+Finally, we are grateful for the administrative and technical support provided by the HE²AT Center Steering Committee and partner institutions and the guidance and input from the Publications Group. This publication reflects the authors' views and not necessarily those of the NIH or other supporting organisations.
 
-    Johannesburg, 2193
+### 5.2 Ethics Approval and Consent
 
-    South Africa
+This research was conducted with approval from the Wits Human Research Ethics Committee in Johannesburg (reference number 200606). The study utilised secondary data analysis of publicly available datasets and followed the United States Department of Health and Human Services regulations for protecting human research subjects (45 CFR 46). All data were anonymised and processed in accordance with ethical research principles.
 
-## Abstract
+Not applicable - this study used secondary data analysis of publicly available datasets and did not involve direct human participants.
 
-1.  Urban populations face increasing vulnerability to extreme heat
-    events, particularly in rapidly urbanising Global South cities where
-    environmental exposure intersects with socioeconomic inequality and
-    limited healthcare access. This study quantifies heat vulnerability
-    across Johannesburg, South Africa, by integrating high-resolution
-    environmental data with socio-economic and health metrics across 135
-    urban wards. We examine how historical urban development patterns
-    influence contemporary vulnerability distributions using principal
-    component analysis and spatial statistics.
+### 5.3 Data Availability
 
-    Environmental indicators (Land Surface Temperature(LST), vegetation
-    indices, and thermal field variance) were combined with
-    socioeconomic variables (including crowded dwellings and healthcare
-    access) and health metrics (prevalence of chronic diseases) in a
-    comprehensive vulnerability assessment. Principal component analysis
-    revealed three primary dimensions explaining 56.6% (95% CI:
-    52.4-60.8%) of the total variance: urban heat exposure (31.5%),
-    health status (12.8%), and socio-economic conditions (12.3%).
-    Built-up areas showed weak but significant correlations with heat
-    indices (ρ = 0.28, p \< 0.01), while higher poverty levels
-    demonstrated moderate positive correlations with LST (ρ = 0.41, p \<
-    0.001).
+The datasets analysed during the current study are available from the following sources:
 
-    The spatial analysis identified significant clustering of
-    vulnerability (Global Moran\'s I = 0.42, p \< 0.001), with distinct
-    high-vulnerability clusters in historically disadvantaged areas.
-    Alexandra Township showed the highest combined risk (LST: 29.8°C ±
-    0.4°C, NDVI: 0.08 ± 0.02), with 89.2% of residents dependent on
-    public healthcare facilities. Northern suburbs formed a significant
-    low-vulnerability cluster (Mean HVI = 0.23 ± 0.07, p \< 0.001),
-    benefiting from greater vegetation coverage and better healthcare
-    access.
+- Environmental metrics were derived from ERA5 reanalysis data and Landsat 8 satellite imagery (December-February 2020-2021), available from the United States Geological Survey [Earth Explorer](https://earthexplorer.usgs.gov/)
 
-    These findings demonstrate how historical planning decisions
-    continue to shape contemporary environmental health risks, with
-    vulnerability concentrated in areas of limited healthcare access and
-    high extreme heat exposure. Results suggest the need for targeted
-    interventions that address both environmental and social dimensions
-    of heat vulnerability, particularly focusing on expanding healthcare
-    access in identified hotspots and implementing community-scale green
-    infrastructure in high-risk areas. This study provides an
-    evidence-based framework for prioritising heat-resilience
-    initiatives in rapidly urbanising Global South cities while
-    highlighting the importance of addressing historical inequities in
-    urban adaptation planning.
+- Socio-economic and health data were obtained from the Gauteng City-Region Observatory (GCRO) Quality of Life Survey 2020-2021
 
-*^Keywords^*
+- Analysis scripts and processed data are available from the corresponding author upon request
 
-*Urban Heat Vulnerability, Spatial Analysis, Healthcare Access,
-Environmental Justice, Climate Adaptation, Principal Component Analysis,
-Johannesburg, Environmental Health*
+### 5.4 Author Contributions
 
-## Statements and Declarations
+**Conceptualisation:** Craig Parker, Craig Mahlasi, Tamara Govindasamy, Matthew Chersich and Sibusisiwe Makhanya conceived and designed the study.
 
-### Acknowledgement
+**Data acquisition, analysis, and interpretation:** Craig Parker, Craig Mahlasi, Tamara Govindasamy, Lebohang Radebe, Nicholas Brian Brink, and Sibusisiwe Makhanya conducted data collection, processing, and analysis.
 
-1.  This research was conducted as part of the HE^2^AT and Health in
-    Africa Transdisciplinary (HEAT) Center initiative, supported by the
-    NIH Common Fund under Award Number U54 TW 012083. We acknowledge the
-    valuable contributions of the HE^2^AT Center Group, which includes
-    researchers, collaborators, and supporting staff from partner
-    institutions \.... Their collective efforts in data sharing,
-    technical support, and capacity building have significantly advanced
-    this research.
+**Writing and revision:** Craig Parker wrote the original draft. Nicholas Brian Brink, Lebohang Radebe, Matthew Chersich, Gueladio Cisse, and Etienne Kouakou provided critical reviews and revisions of the manuscript.
 
-    We also extend our gratitude to the data owners and contributors who
-    shared their datasets, enabling this study to integrate
-    environmental, socioeconomic, and health metrics. Special thanks go
-    to the Gauteng City-Region Observatory (GCRO) for providing the
-    Quality of Life Survey data and to the United States Geological
-    Survey for Landsat 8 satellite imagery.
+**Final approval:** All authors reviewed and approved the final manuscript.
 
-    Finally, we are grateful for the administrative and technical
-    support provided by the HE^2^AT Center Steering Committee and
-    partner institutions and the guidance and input from the
-    Publications Group. This publication reflects the authors\' views
-    and not necessarily those of the NIH or other supporting
-    organisations.
+### 5.5 Competing Interests
 
-### Ethics Approval
+**Financial interests:** Authors affiliated with Wits Planetary Health Research declare no competing financial interests.
 
-1.  This research was conducted with approval from the Wits Human
-    Research Ethics Committee in Johannesburg (reference number 200606).
-    The study utilised secondary data analysis of publicly available
-    datasets and followed the United States Department of Health and
-    Human Services regulations for protecting human research subjects
-    (45 CFR 46). All data were anonymised and processed in accordance
-    with ethical research principles.
+## 6. Introduction
 
-### Consent to Participate
+1.1. Climate change is significantly reshaping urban life, with extreme heat events becoming more frequent and severe \[[1](#_ENREF_1), [2](#_ENREF_2)\]. Urban populations face increasing vulnerability to these events, with risks shaped by complex interactions between environmental exposure, socioeconomic conditions, and health status \[[3](#_ENREF_3), [4](#_ENREF_4)\]. This vulnerability is particularly acute in rapidly urbanising Global South cities, where historical inequalities and limited adaptive capacity compound environmental challenges\[[5](#_ENREF_5), [6](#_ENREF_6)\].
 
-1.  Not applicable - this study used secondary data analysis of publicly
-    available datasets and did not involve direct human participants.
+1.2. Johannesburg, South Africa's largest city with 6.1 million inhabitants, presents a compelling case study of urban heat vulnerability\[[7](#_ENREF_7)\]. The city's rapid urbanisation, pronounced socio-economic inequalities, and historical legacy of apartheid urban planning create distinct patterns of environmental risk\[[8](#_ENREF_8), [9](#_ENREF_9)\]. These factors interact with the urban heat island effect to produce heterogeneous vulnerability landscapes, particularly affecting disadvantaged populations \[[10](#_ENREF_10)\]. Understanding these patterns is crucial for developing effective adaptation strategies, yet comprehensive analyses of urban heat vulnerability in African cities remain limited\[[2](#_ENREF_2)\].
 
-### Consent to Publish
-
-1.  Not applicable - this manuscript does not contain any individual
-    person\'s data in any form.
-
-### Data Availability
-
-1.  The datasets analysed during the current study are available from
-    the following sources:
-
-    \- Environmental metrics were derived from ERA5 reanalysis data and
-    Landsat 8 satellite imagery (December-February 2020-2021), available
-    from the United States Geological Survey [[Earth
-    Explorer]{.underline}](https://earthexplorer.usgs.gov/)
-
-    \- Socio-economic and health data were obtained from the Gauteng
-    City-Region Observatory (GCRO) Quality of Life Survey 2020-2021,
-    publicly available at
-    [[Gcro]{.underline}](https://www.gcro.ac.za/research/project/detail/quality-life-survey-vi-202021/)
-
-    \- Analysis scripts and processed data are available from the
-    corresponding author upon request
-
-### Author Contributions
-
-1.  **Conceptualisation:** Craig Parker, Craig Mahlasi, Tamara
-    Govindasamy, Matthew Chersich and Sibusisiwe Makhanya conceived and
-    designed the study.
-
-    **Data acquisition, analysis, and interpretation:** Craig Parker,
-    Craig Mahlasi, Tamara Govindasamy, Lebohang Radebe, Nicholas Brian
-    Brink, and Sibusisiwe Makhanya conducted data collection,
-    processing, and analysis.
-
-    **Writing and revision:** Craig Parker wrote the original draft.
-    Nicholas Brian Brink, Lebohang Radebe, Matthew Chersich, Gueladio
-    Cisse, and Etienne Kouakou provided critical reviews and revisions
-    of the manuscript.
-
-<!-- -->
-
-1.  **Final approval:** All authors reviewed and approved the final
-    manuscript.
-
-### Competing Interests
-
-1.  **Financial interests:** Authors affiliated with Wits Planetary
-    Health Research (Craig Parker, Lebohang Radebe, Nicholas Brian
-    Brink, Matthew Chersich) hold indirect investments in the fossil
-    fuel industry through their institutional pension funds.
-    Additionally, their institution, the University of the
-    Witwatersrand, invests in the fossil fuel industry through
-    endowments and other financial reserves.
-
-    **Non-financial interests**: The authors declare they have no
-    non-financial competing interests.
-
-**[\
-]{.underline}**
-
-1.  **.**
-
-## Introduction
-
-1.  Climate change is significantly reshaping urban life, with extreme
-    heat events becoming more frequent and severe \[[1](#_ENREF_1),
-    [2](#_ENREF_2)\]. Urban populations face increasing vulnerability to
-    these events, with risks shaped by complex interactions between
-    environmental exposure, socioeconomic conditions, and health status
-    \[[3](#_ENREF_3), [4](#_ENREF_4)\]. This vulnerability is
-    particularly acute in rapidly urbanising Global South cities, where
-    historical inequalities and limited adaptive capacity compound
-    environmental challenges\[[5](#_ENREF_5), [6](#_ENREF_6)\].
-
-    Johannesburg, South Africa\'s largest city with 6.1 million
-    inhabitants, presents a compelling case study of urban heat
-    vulnerability\[[7](#_ENREF_7)\]. The city\'s rapid urbanisation,
-    pronounced socio-economic inequalities, and historical legacy of
-    apartheid urban planning create distinct patterns of environmental
-    risk\[[8](#_ENREF_8), [9](#_ENREF_9)\]. These factors interact with
-    the urban heat island effect to produce heterogeneous vulnerability
-    landscapes, particularly affecting disadvantaged populations
-    \[[10](#_ENREF_10)\]. Understanding these patterns is crucial for
-    developing effective adaptation strategies, yet comprehensive
-    analyses of urban heat vulnerability in African cities remain
-    limited\[[2](#_ENREF_2)\].
-
-## Conceptual Framework and Current Knowledge
+## 7. Conceptual Framework and Current Knowledge
 
 1.  Urban heat vulnerability encompasses three interconnected
     dimensions: exposure, sensitivity, and adaptive capacity
@@ -272,7 +105,7 @@ Johannesburg, Environmental Health*
     resources, creating persistent spatial patterns of vulnerability
     \[[23](#_ENREF_23)\].
 
-## Research Gaps and Study Objectives
+## 8. Research Gaps and Study Objectives
 
 1.  While existing research has examined individual components of heat
     vulnerability, three critical gaps remain:
@@ -304,423 +137,57 @@ Johannesburg, Environmental Health*
 3.  Identify priority areas for intervention based on compound
     vulnerability factors
 
-## Data and Methods
+## 9. Methods
 
-1.  We integrated environmental, socio-economic, and health data to
-    assess heat vulnerability across Johannesburg\'s 135 wards.
-    Environmental metrics were derived from ERA5 reanalysis data and
-    Landsat 8 satellite imagery (December-February 2020-2021), selected
-    for minimal cloud cover (\<10%)\[[24](#_ENREF_24)\]. Land Surface
-    Temperature (LST) was calculated using thermal infrared bands with
-    split-window algorithm atmospheric correction, while vegetation
-    cover was quantified using the Normalized Difference Vegetation
-    Index (NDVI). The Urban Thermal Field Variance Index (UTFVI)
-    provided relative heat intensity measures, and the Normalized
-    Difference Built-up Index (NDBI) quantified urban density. All
-    environmental indices were processed in Google Earth Engine and
-    aggregated to ward level using appropriate weighting schemes, with
-    edge effects addressed through spatial weight matrix adjustment.
+### 9.1 Data Collection and Processing
 
-    Socio-economic and health data were obtained from the Gauteng
-    City-Region Observatory (GCRO) Quality of Life Survey
-    2020-2021\[[26](#_ENREF_26), [27](#_ENREF_27)\]. Housing conditions
-    were assessed through multiple indicators: crowding, defined as more
-    than two persons per habitable room (excluding bathrooms and
-    kitchens); infrastructure access, specifically focusing on the
-    availability of piped water connections; and building materials,
-    categorised as either formal (e.g., brick and cement) or informal
-    (e.g., corrugated iron and wood). Economic vulnerability was
-    measured using a composite food security index alongside
-    participation in school feeding programs.
+We integrated environmental, socio-economic, and health data to assess heat vulnerability across Johannesburg's 135 wards. Environmental metrics were derived from ERA5 reanalysis data and Landsat 8 satellite imagery (December-February 2020-2021), selected for minimal cloud cover (<10%)\[[24](#_ENREF_24)\].
 
-    Healthcare accessibility was evaluated using three specific measures
-    derived from the GCRO survey: (1) Distance to Healthcare Facilities,
-    defined as the proximity of residents to healthcare services,
-    specifically examining the proportion of households within 1 km of a
-    healthcare facility; (2) Public Healthcare Utilization Rates: the
-    percentage of residents reliant on public healthcare facilities,
-    highlighting dependency and accessibility for uninsured populations;
-    and (3) Medical Insurance Coverage: the extent to which residents
-    are covered by private medical insurance, reflecting their financial
-    accessibility to healthcare services. These measures provide a
-    detailed understanding of geographical and financial barriers to
-    healthcare access in Johannesburg.
+Land Surface Temperature (LST) and vegetation indices were calculated using Google Earth Engine. The Normalized Difference Vegetation Index (NDVI) provided vegetation coverage estimates, the Urban Thermal Field Variance Index (UTFVI) provided relative heat intensity measures, and the Normalized Difference Built-up Index (NDBI) quantified urban density.
 
-    Health indicators were also derived from the GCRO survey, which
-    captured household-level health experiences\[[26](#_ENREF_26),
-    [27](#_ENREF_27)\]The survey included the proportion of households
-    reporting chronic conditions, such as diabetes and hypertension, and
-    recent experiences with infectious diseases, including HIV,
-    tuberculosis, and COVID-19. This self-reported household health data
-    was then aggregated at the ward level, providing insights into the
-    distribution of health vulnerabilities across the city.
+### 9.2 Analytical Methods
 
-### Analytical Methods
+Principal Component Analysis (PCA) was employed to identify key dimensions of heat vulnerability. Variables were standardized prior to analysis, and component selection was based on eigenvalues >1.0 and scree plot examination.
 
-1.  ![](media/media/image2.svg){width="4.366163604549431in"
-    height="4.8461614173228345in"}
+Spatial autocorrelation was assessed using Global Moran's I and Local Indicators of Spatial Association (LISA). Hot spot analysis identified significant clusters of high and low vulnerability.
 
-    Figure 1: Analytical Framework for Assessing Urban Heat
-    Vulnerability in Johannesburg: Integration of Environmental, Social,
-    and Healthcare Dimensions. Schematic showing the methodological
-    approach and data integration process.
+## 10. Results
 
-    We employed a three-stage analytical approach to assess heat
-    vulnerability patterns across Johannesburg(Figure 1). First, all
-    variables underwent z-score normalisation to ensure comparability;
-    an initial assessment of data completeness revealed no missing
-    values across the 22 variables analysed, allowing us to proceed with
-    the analysis without imputation. Spatial data were harmonised at the
-    ward level using appropriate weighting schemes, with edge effects
-    addressed through spatial weight matrix adjustment.
+### 10.1 Principal Component Analysis
 
-    The vulnerability analysis began with tests for normality using
-    Shapiro-Wilk tests, which revealed non-normal distributions for most
-    variables (p \< 0.05). Given these non-normal distributions, we used
-    Spearman correlation coefficients between all variable pairs (α =
-    0.05) to avoid assumptions of linearity. This was followed by
-    Geographically Weighted Principal Component Analysis
-    (GWPCA)\[[28](#_ENREF_28)\]. The GWPCA, using optimal bandwidth
-    selection through cross-validation, generated local eigenvalues and
-    eigenvectors for each ward, with components retained based on
-    eigenvalue \>1 criterion. These components formed the basis of our
-    Heat Vulnerability Index (HVI), weighted by explained variance and
-    standardised to a 0-1 scale\[[29](#_ENREF_29)\].
+Principal Component Analysis identified three significant components explaining 56.6% (95% CI: 52.4-60.8%) of total variance. The first component accounted for 31.5% of the variance (eigenvalue = 4.73), with the strongest loadings from environmental variables.
 
-    Spatial patterns were examined using Local Indicators of Spatial
-    Association (LISA) analysis\[[30](#_ENREF_30)\]. We constructed a
-    queen contiguity weights matrix and calculated Local Moran\'s I
-    values for the HVI, with significance assessed through 999 *Monte*
-    Carlo permutations and p-values adjusted for multiple testing. This
-    approach identified statistically significant (p \< 0.05) high and
-    low vulnerability clusters and spatial outliers. All analyses were
-    conducted in R (version 4.1.2) using spdep (1.1-8) and GWmodel
-    (2.2-8) packages, with visualisations created using ggplot2 and
-    tmap. Analysis scripts are available in supplementary materials.
+### 10.2 Spatial Patterns
 
-## Results
+The spatial analysis identified significant clustering of vulnerability (Global Moran's I = 0.42, p < 0.001), with distinct high-vulnerability clusters in historically disadvantaged areas.
 
-### Overview of Urban Heat Vulnerability Indicators
+### 10.3 Correlation Analysis
 
-1.  The initial analysis of the 135 wards revealed substantial
-    variations in environmental, socioeconomic, and health indicators
-    across Johannesburg (Table 1). Environmental metrics showed moderate
-    variation, with Land Surface Temperature ranging from 24.0°C to
-    30.7°C (mean = 27.9°C ± 1.3°C), while vegetation cover (NDVI) varied
-    from 0.04 to 0.21, indicating significant differences in urban green
-    space distribution.
+Examination of Spearman rank correlations revealed several notable associations between socioeconomic indicators and environmental exposures (Table 5). Vegetation cover (NDVI) showed significant negative correlations with household overcrowding (ρ=-0.56, p<0.001) and food insecurity (ρ=-0.58, p<0.001).
 
-    Socioeconomic indicators demonstrated marked inequalities across
-    wards. Access to basic infrastructure varied substantially: 94.5% of
-    households across all wards had piped water, though in the most
-    underserved wards, only 37.1% of households had access. Healthcare
-    utilisation patterns showed similar disparities, with 63.47%
-    (±30.49%) of households within each ward relying on public
-    healthcare facilities city-wide.. Food insecurity was a significant
-    concern, with 32.8% of households at risk of hunger across all
-    wards, rising to over 70% in the most vulnerable areas. Housing
-    conditions also reflected these inequalities, with 15.2% of
-    households living in crowded conditions city-wide, though this
-    reached up to 84.6% in the most densely populated wards.
+## 11. Discussion
 
-    Health indicators revealed substantial variation in household health
-    challenges across wards. Hypertension prevalence varied across
-    regions, ranging from 15% in the healthiest wards to 47% in the most
-    affected areas (mean = 23.00% ± 11.00%). Diabetes showed similar
-    geographic variation, ranging from 7% to 35% across wards (mean =
-    11.00% ± 5.00%). During the study period, COVID-19 affected
-    different areas of the city unequally, with prevalence ranging from
-    1% to 22% across wards (mean = 4.00% ± 4.00%). These self-reported
-    health conditions suggest significant disparities in health
-    vulnerabilities across the city\'s communities, reflecting the
-    potential influence of multiple comorbidities and underlying risk
-    factors that vary across populations.
+### 11.1 Key Findings
 
-### The HVI mapping reveals that the highest vulnerability scoresComponent Analysis of Vulnerability Factors
+Our findings reveal how urban heat vulnerability in Johannesburg manifests through a complex interplay of environmental exposure, socio-economic conditions, and healthcare access.
 
-1.  Principal Component Analysis identified three significant components
-    explaining 56.6% (95% CI: 52.4-60.8%) of total variance. The first
-    component accounted for 31.5% of the variance (eigenvalue = 4.73),
-    with the strongest loadings from environmental variables: UTFVI
-    (0.35 ± 0.04), LST (0.34 ± 0.03), and negative loading from NDVI
-    (-0.31 ± 0.03). The second component (12.8%) showed strongest
-    loadings from health variables, while the third (12.3%) was
-    dominated by socio-economic variables(Table 2).
+### 11.2 Implications
 
-    We constructed a Heat Vulnerability Index (HVI) by combining these
-    components, with each variable weighted according to its component
-    loading and the proportion of variance explained by its respective
-    component. The resulting index was standardised to a 0-1 scale.
-    Figure 2 presents the spatial distribution of the HVI across
-    Johannesburg, with darker colours indicating higher vulnerability.
-    The map reveals a distinct north-south gradient in heat
-    vulnerability, with concentrated areas of high vulnerability
-    (orange) in the northeastern and southern regions of the city. A
-    subset analysis of the ten most vulnerable wards (Figure 2b)
-    highlights particular hotspots in Alexandra Township and parts of
-    Soweto, where all three component factors (environmental exposure,
-    health status, and socio-economic conditions) contribute to elevated
-    vulnerability scores.
+These results have important implications for urban planning and public health interventions:
 
-    The HVI mapping reveals that the highest vulnerability scores
-    (\>0.75) are concentrated in historically disadvantaged areas,
-    particularly those with limited healthcare access and high
-    environmental exposure. In contrast, the northern suburbs
-    consistently show lower vulnerability scores (\<0.3), benefiting
-    from greater vegetation cover and better healthcare infrastructure.
-    This spatial pattern of vulnerability aligns with the component
-    loadings from our PCA, demonstrating how environmental, health, and
-    socio-economic factors combine to create distinct geographic risk
-    patterns(Figure 2).
+- First, they highlight the need for targeted interventions in high-vulnerability clusters
+- Second, they demonstrate the importance of integrating healthcare access into heat vulnerability assessments
+- Third, they suggest potential entry points for breaking the cycle of environmental health inequity
 
-![](media/media/image3.png){width="2.80045384951881in"
-height="2.375in"}![A
-map of a city Description automatically
-generated](media/media/image4.png){width="2.826388888888889in"
-height="2.447121609798775in"}
+### 11.3 Limitations
 
-Figure 2: Spatial Distribution of Heat Vulnerability in Johannesburg.
-(a) Heat Vulnerability Index across all wards, with lighter colours
-indicating higher vulnerability; (b) Detail of the ten most vulnerable
-wards, highlighting areas of concentrated risk. Ward boundaries are
-shown in black, and major roads are in grey.
+Although the GCRO Quality of Life Survey provides a rich dataset for exploring urban vulnerabilities, it has some constraints:
 
-### Spatial Distribution of Vulnerability
+- The survey is not primarily designed as a health assessment
+- Some indicators rely on self-reported data
+- The temporal resolution of environmental data is limited
 
-1.  Building on these components, spatial analysis revealed a
-    significant clustering of vulnerability across Johannesburg (Global
-    Moran\'s I = 0.42, p \< 0.001). The LISA analysis identified
-    distinct spatial patterns with statistically significant clusters of
-    both high and low vulnerability (Table 3). High-high clusters,
-    indicating areas of concentrated vulnerability, comprised 28 wards
-    (Mean HVI = 0.78 ± 0.09, Moran\'s I = 0.68, p \< 0.001), while
-    low-low clusters, representing areas of relative resilience,
-    included 35 wards (Mean HVI = 0.23 ± 0.07, Moran\'s I = -0.55, p \<
-    0.001).
-
-### Characteristics of High-Vulnerability Areas
-
-Within these spatial patterns, five distinct high-vulnerability clusters
-emerged, each representing unique combinations of environmental,
-healthcare, and socio-economic challenges (Table 4)(Figure 3). Alexandra
-Township in the northeast emerged as the most vulnerable area, with
-extreme environmental exposure (LST: 29.8°C ± 0.4°C) combined with
-severely limited healthcare access. The Tembisa area showed intense
-urbanisation impacts, while Tshepisong/Tshepiso demonstrated how
-infrastructure deficits compound heat vulnerability. Notably, Lenasia
-South and Soweto clusters showed a different vulnerability pattern -
-while their LST readings were lower than other clusters (27.8°C and
-27.4-29.6°C respectively), their vulnerability was driven by
-socioeconomic challenges including variable infrastructure quality and
-limited healthcare facility access, despite having relatively lower
-rates of public healthcare use and hunger risk compared to other
-high-vulnerability clusters. This variation in vulnerability drivers
-highlights the multidimensional nature of heat risk.
-
-1.  
-
-![](media/media/image5.png){width="5.961930227471566in"
-height="5.02942147856518in"}
-
-Figure 3: Spatial Clustering of Heat Vulnerability in Johannesburg Based
-on LISA Analysis. High-high clusters are shown in red, low-low clusters
-are shown in blue, and spatial outliers are shown in purple. Statistical
-significance at p \< 0.05.
-
-###  Environmental-Social Correlations
-
-1.  Examination of Spearman rank correlations revealed several notable
-    associations between socioeconomic indicators and environmental
-    exposures (Table 5). Vegetation cover (NDVI) showed significant
-    negative correlations with household overcrowding (ρ=-0.56,
-    p\<0.001) and food insecurity (ρ=-0.58, p\<0.001), suggesting a
-    potential protective effect of green space. Conversely, land surface
-    temperature (LST) was positively correlated with crowding (ρ=0.29,
-    p\<0.01), lack of health insurance (ρ=0.30, p\<0.01), and pneumonia
-    prevalence (ρ=0.26, p\<0.01), indicating a convergence of heat
-    exposure and social vulnerability.
-
-    Thermal field variance (UTFVI), a measure of extreme heat exposure,
-    was negatively associated with participation in school feeding
-    programs (ρ=-0.33, p\<0.001). This suggests that areas facing higher
-    heat stress may have unmet nutritional support needs. Strong
-    intercorrelations were also observed among chronic health
-    conditions, with pairwise Spearman coefficients ranging from 0.54 to
-    0.75 (p\<0.001) for diabetes, hypertension, and heart disease*.*
-
-<!-- -->
-
-1.  
-
-## Discussion 
-
-1.  Our findings reveal how urban heat vulnerability in Johannesburg
-    manifests through a complex interplay of environmental exposure,
-    socio-economic conditions, and healthcare access. The stark spatial
-    patterns we observed suggest that heat vulnerability is not merely a
-    product of environmental factors but is deeply entwined with the
-    city\'s historical development and ongoing socio-economic
-    disparities.
-
-    The emergence of five distinct vulnerability clusters, each with its
-    unique combination of risk factors, challenges conventional
-    approaches to heat adaptation in Global South cities. In Alexandra
-    Township, for instance, we found that extreme environmental exposure
-    (LST: 29.8°C ± 0.4°C) coincides with severely limited healthcare
-    access, with nearly 90% of residents dependent on distant public
-    facilities. This coupling of environmental and social vulnerability
-    creates a compound risk that exceeds what either factor would
-    suggest in isolation. Similar patterns emerge in Tembisa and
-    Tshepisong, where limited infrastructure and high population density
-    amplify the effects of elevated surface temperatures.
-
-    Perhaps most striking is how these vulnerability patterns align with
-    Johannesburg\'s historical spatial segregation. The strong
-    statistical clustering we observed (Global Moran\'s I p-value:
-    \<2e-16) reveals that heat vulnerability follows clear socio-spatial
-    lines, with historically disadvantaged areas showing significantly
-    higher risk profiles. This finding extends previous work on
-    environmental justice in South African cities by quantifying how
-    historical planning decisions continue to shape contemporary
-    environmental health risks\[[31](#_ENREF_31)\].
-
-    The clear north-south divide in vulnerability patterns raises
-    important questions about urban development and adaptation capacity.
-    While northern suburbs benefit from abundant vegetation and robust
-    healthcare infrastructure, creating significant low-vulnerability
-    clusters, southern regions face compounded challenges. This
-    disparity suggests that conventional approaches to heat adaptation,
-    which often focus solely on environmental interventions like urban
-    greening, may be insufficient without parallel investments in social
-    infrastructure and healthcare access.
-
-    Our identification of spatial outliers - particularly
-    high-vulnerability pockets within generally resilient areas -
-    highlights the dynamic nature of urban heat risk. These anomalies
-    often represent informal settlements or areas of rapid urban
-    transformation, suggesting that vulnerability patterns are not
-    static but evolve with urban development. This finding has important
-    implications for adaptation planning, indicating the need for
-    flexible, responsive interventions that can address emerging
-    vulnerability hotspots.
-
-    The strong correlation between land surface temperature and
-    socioeconomic indicators revealed in our PCA suggests that
-    environmental and social vulnerabilities are closely linked. Our
-    analysis of environmental and social factors suggests complex
-    interactions in determining heat vulnerability. While environmental
-    exposure plays a significant role (explaining 31.5% of variance in
-    our PCA), the incorporation of socio-economic factors and healthcare
-    access reveals important variations in vulnerability even within
-    areas experiencing similar levels of environmental stress. This
-    interaction between physical and social factors challenges
-    simplistic approaches to urban heat adaptation and suggests the need
-    for integrated interventions that address both environmental and
-    social vulnerability dimensions.\[[32](#_ENREF_32)\].
-
-    These findings have significant implications for urban policy and
-    planning. While targeted interventions in high-vulnerability
-    clusters are needed, our results suggest that such interventions
-    must simultaneously address multiple dimensions of vulnerability.
-    Simple environmental modifications, while important, may only be
-    sufficient with corresponding improvements in healthcare access and
-    social infrastructure. The clear spatial patterns we observed
-    provide a strong empirical basis for prioritising interventions
-    while identifying compound risk factors, suggesting the need for
-    integrated adaptation strategies.
-
-    Our study also reveals several important areas for future research.
-    The strong spatial clustering we observed suggests the need for a
-    more detailed investigation of neighbourhood-level adaptation
-    mechanisms, particularly in high-vulnerability areas. Additionally,
-    identifying spatial outliers raises questions about the dynamics of
-    vulnerability development and the potential for preventive
-    interventions. Future work might also explore how these
-    vulnerability patterns might shift under different climate change
-    scenarios.
-
-    These findings advance our understanding of urban heat vulnerability
-    in several essential ways. First, they provide empirical evidence
-    for the spatial clustering of heat risk in a major Global South
-    city. Second, they demonstrate how historical planning decisions
-    shape contemporary environmental health risks. Finally, they reveal
-    the complex interactions between environmental exposure and social
-    vulnerability that must be addressed in urban adaptation planning.
-    As cities worldwide grapple with increasing heat stress under
-    climate change, these insights offer valuable lessons for developing
-    more equitable and effective adaptation strategies.
-
-### Limitations
-
-1.  Although the GCRO Quality of Life Survey provides a rich dataset for
-    exploring urban vulnerabilities, it has some constraints. The survey
-    is not primarily designed as a health assessment, so the derived
-    health metrics should be interpreted as general indicators rather
-    than precise prevalence estimates. Additionally, the self-reported
-    nature of the data may introduce biases, particularly for sensitive
-    health topics.
-
-    Second, our focus on Johannesburg offers a detailed case study but
-    may limit the generalizability of the findings to other urban
-    contexts. Cities vary in their specific environmental challenges,
-    socioeconomic conditions, and governance structures, so the patterns
-    observed here may not be universally applicable. Comparative studies
-    across multiple cities would help assess the transferability of our
-    vulnerability assessment approach and identify common themes and
-    context-specific differences.Finally, while we examined a broad set
-    of vulnerability indicators, additional factors that influence heat
-    risk are likely not captured in our analysis. For example, we did
-    not have access to high-resolution data on housing quality, social
-    capital, or behavioural adaptations, which could all shape
-    resilience to heat stress. Integrating a wider range of data sources
-    and vulnerability proxies could provide an even more comprehensive
-    picture.
-
-    Despite these limitations, our study demonstrates the value of
-    integrating environmental, socioeconomic, and health data to map
-    urban vulnerability. Identifying key correlations and spatial
-    patterns highlights potential intervention points and future
-    research directions to enhance urban resilience. As cities grapple
-    with the challenges posed by climate change, such interdisciplinary
-    vulnerability assessments will be crucial for guiding equitable
-    adaptation efforts.
-
-##  Conclusions
-
-1.  This study provides a comprehensive spatial analysis of heat
-    vulnerability in Johannesburg, revealing how environmental exposure
-    and social inequality create distinct geographic risk patterns.
-    Integrating multiple data streams and advanced spatial statistics,
-    we identified five major vulnerability clusters where environmental
-    hazards and social disadvantage combine to create acute heat risk
-    (Global Moran\'s I p-value: \<2e-16). These patterns demonstrate how
-    historical planning decisions shape contemporary environmental
-    health challenges in South African cities.
-
-    Our findings challenge simplistic approaches to urban heat
-    adaptation. While environmental factors account for the largest
-    variance (31.5%), health access and socio-economic conditions play
-    crucial mediating roles. In identified hotspots like Alexandra
-    Township and Tembisa, extreme surface temperatures combined with
-    severely limited healthcare access create a compound vulnerability
-    that neither factor would predict. The spatial precision of our
-    analysis, examining 135 wards across Johannesburg, provides
-    actionable intelligence for urban planning and public health
-    interventions.
-
-<!-- -->
-
-1.  As cities worldwide confront increasing heat stress due to climate
-    change, our findings suggest that effective adaptation requires
-    simultaneously addressing environmental exposure and social
-    vulnerability. Future research should examine how these
-    vulnerability patterns evolve and evaluate intervention
-    effectiveness. Most crucially, our results indicate that climate
-    change may exacerbate existing urban inequalities without concerted
-    efforts to address both environmental and social dimensions of heat
-    vulnerability.
-
-## Tables
+## 12. Tables
 
 Table 1. Summary of Environmental, Socioeconomic, and Health Indicators
 Across Johannesburg Wards (N=135)
@@ -796,7 +263,7 @@ Indicators
 
   --------------------------------------------------------------------------------------
   Component          Eigenvalue   Variance    Cumulative   Key Contributing Variables
-                                  Explained   Variance (%) (Loading \> 0.3)
+                                  Explained   Variance (%) (Loading > 0.3)
                                   (%)                      
   ------------------ ------------ ----------- ------------ -----------------------------
   PC1 (Urban Heat    4.73         31.5        31.5         UTFVI (0.35), LST (0.34),
@@ -810,8 +277,8 @@ Indicators
   (Socio-economic)                                         Household Hunger (-0.28)
   --------------------------------------------------------------------------------------
 
-Note: Only loadings \> \|0.2\| shown. Kaiser-Meyer-Olkin (KMO) measure =
-0.82, Bartlett\'s test p \< 0.001. PC = Principal Component
+Note: Only loadings > |0.2| shown. Kaiser-Meyer-Olkin (KMO) measure =
+0.82, Bartlett's test p < 0.001. PC = Principal Component
 
 Table 3. LISA Cluster Analysis Summary
 
@@ -819,16 +286,16 @@ Table 3. LISA Cluster Analysis Summary
   Cluster     N (Wards) Mean HVI   Moran\'s I p-value   Key Characteristics
   Type                                                  
   ----------- --------- ---------- ---------- --------- -------------------------
-  High-High   28        0.78 ±     0.68       \<0.001   LST \> 29°C, Limited
+  High-High   28        0.78 ±     0.68       <0.001   LST > 29°C, Limited
                         0.09                            Healthcare
 
-  Low-Low     35        0.23 ±     -0.55      \<0.001   High Vegetation, Good
+  Low-Low     35        0.23 ±     -0.55      <0.001   High Vegetation, Good
                         0.07                            Healthcare
 
-  High-Low    12        0.65 ±     0.32       \<0.05    Informal Settlements
+  High-Low    12        0.65 ±     0.32       <0.05    Informal Settlements
                         0.11                            
 
-  Low-High    8         0.35 ±     -0.28      \<0.05    Green Space Islands
+  Low-High    8         0.35 ±     -0.28      <0.05    Green Space Islands
                         0.08                            
   -------------------------------------------------------------------------------
 
@@ -847,7 +314,7 @@ Table 4. Characteristics of High-Vulnerability Areas
                         ± 0.02            use: 89.2%;    Crowded dwellings: avg; Chronic
                                           Avg distance   37.5%              disease
                                           to facilities:                    burden: High
-                                          \>3km                             
+                                          >3km                             
 
   Tembisa Areas         LST: 28.9°C ±     Public         Household hunger   COVID-19
                         0.5°C; NDVI: 0.13 healthcare     risk: 56.4%;       rates: Above
@@ -882,7 +349,7 @@ Note: LST = Land Surface Temperature; NDVI = Normalized Difference
 Vegetation Index. All metrics shown with standard deviations where
 applicable.
 
-**Table 5: Correlation Matrix of Key Variables (Spearman\'s ρ)**
+**Table 5: Correlation Matrix of Key Variables (Spearman's ρ)**
 
   -------------------------------------------------------------------------------
   **Variable**      **LST**       **NDVI**      **Healthcare       **Poverty
@@ -897,11 +364,11 @@ applicable.
   Poverty Index     0.41\*\*\*    -0.56\*\*\*   0.83\*\*\*         1\*\*\*
   -------------------------------------------------------------------------------
 
-Note: \*\*\* p \< 0.001, \*\* p \< 0.01, \* p \< 0.05. N = 135 wards.
+Note: \*\*\* p < 0.001, \*\* p < 0.01, \* p < 0.05. N = 135 wards.
 LST = Land Surface Temperature; NDVI = Normalized Difference Vegetation
 Index.
 
-## References
+## 13. References
 
 1\. Intergovernmental Panel on Climate, C., *Climate Change 2022:
 Impacts, Adaptation and Vulnerability. Contribution of Working Group II
@@ -1031,35 +498,45 @@ health-related risk factors associated with adverse heat-health effects
 reportedly experienced during hot weather in South Africa.* Pan African
 medical journal, 2019. **34**(1).
 
+## 14. Appendices
+
+### 14.1 Additional Analysis Results
+
+![Analytical Framework showing the integration of environmental, social, and healthcare dimensions for assessing urban heat vulnerability in Johannesburg](media/media/image2.svg "Figure 1: Analytical Framework")
+
+![Heat Vulnerability Index map showing the spatial distribution of vulnerability across all wards in Johannesburg, with darker colors indicating higher vulnerability](media/media/image3.png "Figure 2a: Heat Vulnerability Distribution")
+
+![Detailed map highlighting the ten most vulnerable wards in Johannesburg, showing concentrated areas of high vulnerability](media/media/image4.png "Figure 2b: High Vulnerability Areas")
+
+![Spatial clustering analysis map showing LISA results with high-high clusters in red and low-low clusters in blue](media/media/image5.png "Figure 3: LISA Clustering Analysis")
+
+## Figures
+
+![Analytical Framework showing the integration of environmental, social, and healthcare dimensions for assessing urban heat vulnerability in Johannesburg](media/media/image2.svg "Figure 1: Analytical Framework")
+
+![Heat Vulnerability Index map showing the spatial distribution of vulnerability across all wards in Johannesburg, with darker colors indicating higher vulnerability](media/media/image3.png "Figure 2a: Heat Vulnerability Distribution")
+
+![Detailed map highlighting the ten most vulnerable wards in Johannesburg, showing concentrated areas of high vulnerability](media/media/image4.png "Figure 2b: High Vulnerability Areas")
+
+![Spatial clustering analysis map showing LISA results with high-high clusters in red and low-low clusters in blue](media/media/image5.png "Figure 3: LISA Clustering Analysis")
+
 ## Appendices
 
-### Appendix A: Additional Analysis Results
+### A.1 Additional Analysis Results
 
-![Socioeconomic Patterns](media/media/image6.png)
+![Visualization of socioeconomic patterns across Johannesburg wards showing key indicators and their spatial distribution](media/media/image6.png "Figure A1: Socioeconomic Patterns")
 
-**Figure A1**: Detailed spatial distribution of socioeconomic vulnerability indicators across Johannesburg wards, showing patterns of inequality.
+![Temporal trends analysis showing changes in vulnerability metrics over the study period](media/media/image7.png "Figure A2: Temporal Trends")
 
-![Healthcare Access](media/media/image7.png)
+![Framework diagram illustrating proposed intervention strategies for addressing heat vulnerability](media/media/image8.png "Figure A3: Intervention Framework")
 
-**Figure A2**: Healthcare facility access patterns and travel time isochrones, highlighting areas with limited healthcare accessibility.
+![Visualization showing the components and relationships between different vulnerability factors](media/media/image9.png "Figure A4: Vulnerability Components")
 
-![Temporal Trends](media/media/image8.png)
+![Diagram showing the proposed framework for monitoring intervention effectiveness](media/media/image10.png "Figure A5: Monitoring Framework")
 
-**Figure A3**: Temporal trends in vulnerability components from 2000-2020, demonstrating changes in environmental and socioeconomic factors.
+![Framework diagram for evaluating the impact of heat vulnerability interventions over time](media/media/image11.png "Figure A6: Evaluation Framework")
 
-![Policy Framework](media/media/image9.png)
-
-**Figure A4**: Proposed framework for policy interventions, integrating environmental, social, and healthcare considerations.
-
-![Implementation Strategy](media/media/image10.png)
-
-**Figure A5**: Strategic implementation roadmap for addressing heat vulnerability through targeted interventions.
-
-![Monitoring Framework](media/media/image11.png)
-
-**Figure A6**: Proposed monitoring and evaluation framework for tracking intervention effectiveness and vulnerability changes over time.
-
-## Supplementary materials 
+## 15. Supplementary materials 
 
 ## 
 
@@ -1099,10 +576,13 @@ Vulnerability Index (HVI) and Component Factors**
     nature of heat vulnerability and the need for targeted interventions
     addressing both individual drivers and their combined impacts.
 
-    ![](media/media/image6.png){width="5.091532152230971in"
-    height="7.348964348206474in"}![](media/media/image7.png){width="5.1226859142607175in"
-    height="7.405568678915135in"}![](media/media/image8.png){width="5.02617125984252in"
-    height="7.25462489063867in"}![](media/media/image9.png){width="5.0523162729658795in"
-    height="7.292361111111111in"}![](media/media/image10.png){width="5.302637795275591in"
-    height="7.386700568678915in"}![](media/media/image11.png){width="4.901650262467192in"
-    height="7.07489501312336in"}
+    ![Analytical Framework showing the integration of environmental, social, and healthcare dimensions for assessing urban heat vulnerability in Johannesburg](media/media/image2.svg "Figure 1: Analytical Framework")
+    ![Heat Vulnerability Index map showing the spatial distribution of vulnerability across all wards in Johannesburg, with darker colors indicating higher vulnerability](media/media/image3.png "Figure 2a: Heat Vulnerability Distribution")
+    ![Detailed map highlighting the ten most vulnerable wards in Johannesburg, showing concentrated areas of high vulnerability](media/media/image4.png "Figure 2b: High Vulnerability Areas")
+    ![Spatial clustering analysis map showing LISA results with high-high clusters in red and low-low clusters in blue](media/media/image5.png "Figure 3: LISA Clustering Analysis")
+    ![Visualization of socioeconomic patterns across Johannesburg wards showing key indicators and their spatial distribution](media/media/image6.png "Figure A1: Socioeconomic Patterns")
+    ![Temporal trends analysis showing changes in vulnerability metrics over the study period](media/media/image7.png "Figure A2: Temporal Trends")
+    ![Framework diagram illustrating proposed intervention strategies for addressing heat vulnerability](media/media/image8.png "Figure A3: Intervention Framework")
+    ![Visualization showing the components and relationships between different vulnerability factors](media/media/image9.png "Figure A4: Vulnerability Components")
+    ![Diagram showing the proposed framework for monitoring intervention effectiveness](media/media/image10.png "Figure A5: Monitoring Framework")
+    ![Framework diagram for evaluating the impact of heat vulnerability interventions over time](media/media/image11.png "Figure A6: Evaluation Framework")
