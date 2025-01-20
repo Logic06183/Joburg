@@ -22,6 +22,9 @@ import datetime
 import logging
 import time
 import os
+from typing import Dict, List, Optional, Union, Any, Tuple
+from dataclasses import dataclass, field
+from datetime import datetime
 
 # Set up logging
 logging.basicConfig(
@@ -50,488 +53,283 @@ FT_STYLE = {
     'grid_alpha': 0.3
 }
 
+@dataclass
+class PlotConfig:
+    """Configuration for plot styling and colors."""
+    colors: Dict[str, str] = field(default_factory=lambda: {
+        'historical': '#2E5A87',  # Darker blue
+        'current': '#E63946',     # Warm red
+        'grid': '#CCCCCC',
+        'annotation': '#666666'
+    })
+    
+    fonts: Dict[str, Dict[str, Any]] = field(default_factory=lambda: {
+        'title': {'size': 20, 'weight': 'bold'},
+        'subtitle': {'size': 14},
+        'axis': {'size': 12},
+        'annotation': {'size': 10}
+    })
+    
+    layout: Dict[str, Any] = field(default_factory=lambda: {
+        'grid_opacity': 0.2,
+        'spacing': {'vertical': 0.15, 'horizontal': 0.12},
+        'margin': {'t': 100, 'b': 80, 'l': 50, 'r': 50}  # Using plotly margin keys
+    })
+
 class HeatWaveVisualizer:
-    """
-    Creates FT-styled visualizations for heat wave analysis.
-    """
+    """Creates visualizations for heat wave analysis."""
     
-    def __init__(self, output_dir=None):
-        """
-        Initialize visualizer with output directory.
-        
-        Parameters:
-        -----------
-        output_dir : str or Path
-            Directory to save generated figures
-        """
-        logger.debug("Initializing HeatWaveVisualizer")
-        if output_dir is None:
-            output_dir = Path.cwd() / 'figures' / 'heatwave_analysis'
-        self.output_dir = Path(output_dir)
+    def __init__(self):
+        """Initialize visualizer."""
+        self.output_dir = Path('figures/heatwave_analysis')
         self.output_dir.mkdir(parents=True, exist_ok=True)
-        logger.debug(f"Output directory: {self.output_dir}")
-        
-    def _setup_style(self):
-        """Configure matplotlib style for FT aesthetics."""
-        plt.style.use('seaborn-v0_8')
-        plt.rcParams.update({
-            'font.family': FT_STYLE['font_family'],
-            'figure.facecolor': FT_COLORS['background'],
-            'axes.facecolor': FT_COLORS['background'],
-            'axes.edgecolor': FT_COLORS['axis_grey'],
-            'axes.labelcolor': FT_COLORS['dark_grey'],
-            'xtick.color': FT_COLORS['mid_grey'],
-            'ytick.color': FT_COLORS['mid_grey'],
-            'grid.color': FT_STYLE['grid_color'],
-            'grid.alpha': FT_STYLE['grid_alpha']
-        })
+        self.colors = {
+            'historical': '#4C72B0',  # Darker blue
+            'current': '#55A868'      # Muted green
+        }
     
-    def _add_source_and_notes(self, fig, source_text, notes_text=None):
-        """Add source attribution and notes to the figure."""
-        fig.text(0.02, 0.02, f"Source: {source_text}", 
-                fontsize=FT_STYLE['annotation_size'], 
-                color=FT_COLORS['mid_grey'])
-        
-        if notes_text:
-            fig.text(0.02, 0.04, f"Notes: {notes_text}", 
-                    fontsize=FT_STYLE['annotation_size'], 
-                    color=FT_COLORS['mid_grey'])
-    
-    def plot_heatwave_comparison(self, historical_data, current_data, 
-                               metric='days', definition='SAWS'):
-        """
-        Create bar chart comparing heat wave metrics between periods.
-        
-        Parameters:
-        -----------
-        historical_data : dict
-            Historical period heat wave metrics
-        current_data : dict
-            Current period heat wave metrics
-        metric : str
-            Type of metric to plot ('days' or 'events')
-        definition : str
-            Heat wave definition used ('SAWS' or '90th_percentile')
-        """
-        fig, ax = plt.subplots(figsize=(10, 6))
-        
-        # Prepare data
-        periods = ['Historical\n(1981-2010)', 'Current\n(2011-2019)']
-        if metric == 'days':
-            values = [historical_data['total_days'], current_data['total_days']]
-            title = f'Heat Wave Days Comparison ({definition} Definition)'
-            ylabel = 'Number of Heat Wave Days'
-        else:
-            values = [historical_data['num_events'], current_data['num_events']]
-            title = f'Heat Wave Events Comparison ({definition} Definition)'
-            ylabel = 'Number of Heat Wave Events'
-            
-        # Create bars
-        bars = ax.bar(periods, values, color=FT_COLORS['main_red'])
-        
-        # Add value labels
-        for bar in bars:
-            height = bar.get_height()
-            ax.text(bar.get_x() + bar.get_width()/2., height,
-                   f'{height:.0f}',
-                   ha='center', va='bottom',
-                   color=FT_COLORS['dark_grey'])
-        
-        # Styling
-        ax.set_title(title, fontsize=FT_STYLE['title_size'], 
-                    color=FT_COLORS['dark_grey'], pad=20)
-        ax.set_ylabel(ylabel, fontsize=FT_STYLE['axis_title_size'])
-        ax.grid(True, axis='y', alpha=FT_STYLE['grid_alpha'])
-        
-        # Add source and notes
-        self._add_source_and_notes(
-            fig,
-            "ERA5 reanalysis data",
-            f"Analysis using {definition} definition of heat waves at Rahima Moosa Hospital"
-        )
-        
-        # Save figure
-        plt.tight_layout()
-        filename = f'heatwave_{metric}_{definition.lower()}.png'
-        plt.savefig(self.output_dir / filename, dpi=300, bbox_inches='tight')
-        plt.close()
-        
-    def plot_temperature_distribution(self, historical_data, current_data):
-        """Create temperature distribution comparison plot."""
-        fig, ax = plt.subplots(figsize=(12, 6))
-        
-        # Create density plots
-        sns.kdeplot(data=historical_data['temperature'], 
-                   label='Historical (1981-2010)',
-                   color=FT_COLORS['main_red'],
-                   ax=ax)
-        sns.kdeplot(data=current_data['temperature'],
-                   label='Current (2011-2019)',
-                   color=FT_COLORS['light_red'],
-                   ax=ax)
-        
-        # Styling
-        ax.set_title('Temperature Distribution Comparison',
-                    fontsize=FT_STYLE['title_size'],
-                    color=FT_COLORS['dark_grey'])
-        ax.set_xlabel('Temperature (°C)',
-                     fontsize=FT_STYLE['axis_title_size'])
-        ax.set_ylabel('Density',
-                     fontsize=FT_STYLE['axis_title_size'])
-        ax.legend(frameon=True, facecolor=FT_COLORS['background'])
-        
-        # Add source and notes
-        self._add_source_and_notes(
-            fig,
-            "ERA5 reanalysis data",
-            "Kernel density estimation of daily maximum temperatures"
-        )
-        
-        # Save figure
-        plt.tight_layout()
-        plt.savefig(self.output_dir / 'temperature_distribution.png',
-                   dpi=300, bbox_inches='tight')
-        plt.close()
-        
-    def create_interactive_dashboard(self, historical_data, current_data,
-                                   saws_results, percentile_results):
-        """Create interactive Plotly dashboard."""
+    def create_analysis_dashboard(self, historical_data: pd.DataFrame, current_data: pd.DataFrame) -> None:
+        """Create a comprehensive dashboard comparing historical and current periods."""
+        # Create figure with subplots
         fig = make_subplots(
-            rows=2, cols=2,
+            rows=3, cols=2,
             subplot_titles=(
-                'Heat Wave Days Comparison',
                 'Temperature Distribution',
-                'Heat Wave Events by Season',
-                'Definition Comparison'
-            )
+                'Heat Wave Events per Year',
+                'Monthly Heat Wave Days',
+                'Heat Wave Events per Season'
+            ),
+            specs=[[{}, {}],
+                  [{}, {}],
+                  [{"colspan": 2}, None]],
+            vertical_spacing=0.12,
+            horizontal_spacing=0.1
         )
+
+        # Add title
+        fig.update_layout(
+            title_text='Spring & Summer Heat Wave Trends at Rahima Moosa Hospital<br>Comparing Historical (1980-1989) vs Current (2015-2024) Periods',
+            title_x=0.5,
+            height=1200,
+            showlegend=True,
+            template='seaborn'
+        )
+
+        # Plot temperature distribution
+        self._add_temperature_distribution(fig, historical_data, current_data, row=1, col=1)
         
-        # Heat Wave Days Comparison
+        # Plot heat wave events per year
+        self._add_heatwave_events(fig, historical_data, current_data, row=1, col=2)
+        
+        # Plot monthly heat wave days
+        self._add_monthly_heatwaves(fig, historical_data, current_data, row=2, col=1)
+        
+        # Plot seasonal distribution
+        self._add_seasonal_distribution(fig, historical_data, current_data, row=2, col=2)
+
+        # Add findings and sources section
+        findings_text = """
+        <b>Key Findings:</b><br>
+        1. Heat Wave Definition: A heat wave is defined as 3 or more consecutive days where the maximum temperature exceeds the 90th percentile threshold (calculated from the historical period 1980-1989).<br>
+        2. Temperature Increase: The current period (2015-2024) shows a clear shift towards higher temperatures compared to the historical period (1980-1989).<br>
+        3. Heat Wave Frequency: The frequency of heat wave events has increased in the current period, particularly during summer months.<br>
+        4. Seasonal Patterns: Heat waves are most frequent in December, with February showing the highest average number of heat wave days.<br>
+        <br>
+        <b>Sources:</b><br>
+        - Temperature Data: ERA5 reanalysis dataset (Hersbach et al., 2020)<br>
+        - Heat Wave Definition: Based on WMO Guidelines for Heat Wave Definition (WMO, 2018)<br>
+        - Analysis Period: Spring-Summer months (September-February) for both historical (1980-1989) and current (2015-2024) periods
+        """
+        
+        fig.add_annotation(
+            text=findings_text,
+            xref="paper", yref="paper",
+            x=0, y=-0.2,
+            showarrow=False,
+            font=dict(size=12),
+            align="left",
+            xanchor="left",
+            yanchor="top"
+        )
+
+        # Update layout for the findings section
+        fig.update_layout(
+            margin=dict(t=100, b=300)  # Increase bottom margin for findings
+        )
+
+        # Save the figure
+        timestamp = int(time.time())
+        output_file = f'figures/heatwave_analysis/heatwave_analysis_{timestamp}.html'
+        fig.write_html(output_file)
+    
+    def _add_temperature_distribution(self, fig, historical_data, current_data, row, col):
+        """Add temperature distribution subplot."""
+        # Create temperature bins
+        bins = np.linspace(10, 35, 50)
+        
+        # Historical distribution
+        hist_hist, _ = np.histogram(historical_data['temperature_celsius'], bins=bins, density=True)
         fig.add_trace(
             go.Bar(
-                x=['Historical', 'Current'],
-                y=[saws_results['historical']['total_days'],
-                   saws_results['current']['total_days']],
-                name='SAWS Definition',
-                marker_color=FT_COLORS['main_red']
+                x=bins[:-1],
+                y=hist_hist,
+                name='1980-1989',
+                marker_color=self.colors['historical'],
+                opacity=0.7
             ),
-            row=1, col=1
+            row=row, col=col
         )
         
-        # Temperature Distribution
+        # Current distribution
+        current_hist, _ = np.histogram(current_data['temperature_celsius'], bins=bins, density=True)
         fig.add_trace(
-            go.Histogram(
-                x=historical_data['temperature'],
-                name='Historical',
-                opacity=0.75,
-                marker_color=FT_COLORS['main_red']
+            go.Bar(
+                x=bins[:-1],
+                y=current_hist,
+                name='2015-2024',
+                marker_color=self.colors['current'],
+                opacity=0.7
             ),
-            row=1, col=2
+            row=row, col=col
         )
+        
+        fig.update_xaxes(title_text='Maximum Temperature (°C)', row=row, col=col)
+        fig.update_yaxes(title_text='Proportion of Days', row=row, col=col)
+    
+    def _add_monthly_heatwaves(self, fig, historical_data, current_data, row, col):
+        """Add monthly heat wave days subplot."""
+        # Calculate monthly averages for both periods
+        historical_monthly = historical_data.groupby(
+            historical_data['date'].dt.month)['is_heatwave'].mean()
+        current_monthly = current_data.groupby(
+            current_data['date'].dt.month)['is_heatwave'].mean()
+        
+        # Define month order (Sep-Feb)
+        month_order = [9, 10, 11, 12, 1, 2]
+        month_names = ['Sep', 'Oct', 'Nov', 'Dec', 'Jan', 'Feb']
+        
+        # Reorder data
+        historical_monthly = historical_monthly.reindex(month_order)
+        current_monthly = current_monthly.reindex(month_order)
+        
+        # Create traces
         fig.add_trace(
-            go.Histogram(
-                x=current_data['temperature'],
-                name='Current',
-                opacity=0.75,
-                marker_color=FT_COLORS['light_red']
+            go.Bar(
+                x=month_names,
+                y=historical_monthly,
+                name='1980-1989',
+                marker_color=self.colors['historical']
             ),
-            row=1, col=2
+            row=row, col=col
         )
         
-        # Update layout
-        fig.update_layout(
-            template='none',
-            plot_bgcolor=FT_COLORS['background'],
-            paper_bgcolor=FT_COLORS['background'],
-            font_family=FT_STYLE['font_family'],
-            font_color=FT_COLORS['dark_grey'],
-            showlegend=True
+        fig.add_trace(
+            go.Bar(
+                x=month_names,
+                y=current_monthly,
+                name='2015-2024',
+                marker_color=self.colors['current']
+            ),
+            row=row, col=col
         )
         
-        # Save dashboard
-        fig.write_html(self.output_dir / 'interactive_dashboard.html')
-
-    def plot_trend_analysis(self, data, title="Heat Wave Trend Analysis"):
-        """
-        Create a trend analysis plot showing the increasing frequency of heat waves.
-        """
-        # Create yearly aggregation
-        yearly_data = data.resample('Y').sum()
+        fig.update_xaxes(title_text='Month', row=row, col=col)
+        fig.update_yaxes(title_text='Average Heat Wave Days', row=row, col=col)
+    
+    def _add_annual_distribution(self, fig, historical_data, current_data, row, col):
+        """Add annual heat wave distribution subplot."""
+        # Calculate annual events
+        historical_annual = historical_data.groupby(
+            historical_data['date'].dt.year)['is_heatwave'].sum()
+        current_annual = current_data.groupby(
+            current_data['date'].dt.year)['is_heatwave'].sum()
         
-        # Calculate trend line
-        x = np.arange(len(yearly_data))
-        z = np.polyfit(x, yearly_data['heat_wave_days'], 1)
-        p = np.poly1d(z)
-        
-        fig = go.Figure()
-        
-        # Add bar chart for actual values
-        fig.add_trace(go.Bar(
-            x=yearly_data.index,
-            y=yearly_data['heat_wave_days'],
-            name='Heat Wave Days',
-            marker_color=FT_COLORS['main_red']
-        ))
-        
-        # Add trend line
-        fig.add_trace(go.Scatter(
-            x=yearly_data.index,
-            y=p(x),
-            name='Trend',
-            line=dict(color=FT_COLORS['light_red'], dash='dash'),
-            mode='lines'
-        ))
-        
-        fig.update_layout(
-            title=title,
-            xaxis_title="Year",
-            yaxis_title="Number of Heat Wave Days",
-            template="plotly_white",
-            showlegend=True,
-            font=dict(family=FT_STYLE['font_family']),
-            plot_bgcolor=FT_COLORS['background'],
-            annotations=[
-                dict(
-                    x=0.02,
-                    y=1.05,
-                    xref="paper",
-                    yref="paper",
-                    text="Source: ERA5 Reanalysis Data",
-                    showarrow=False,
-                    font=dict(size=FT_STYLE['annotation_size'])
-                )
-            ]
+        fig.add_trace(
+            go.Box(
+                y=historical_annual,
+                name='1980-1989',
+                marker_color=self.colors['historical'],
+                boxpoints='all'
+            ),
+            row=row, col=col
         )
         
-        return fig
+        fig.add_trace(
+            go.Box(
+                y=current_annual,
+                name='2015-2024',
+                marker_color=self.colors['current'],
+                boxpoints='all'
+            ),
+            row=row, col=col
+        )
+        
+        fig.update_xaxes(title_text='Period', row=row, col=col)
+        fig.update_yaxes(title_text='Heat Wave Events per Season', row=row, col=col)
+    
+    def _add_heatwave_events(self, fig, historical_data, current_data, row, col):
+        """Add heat wave events per year subplot."""
+        # Calculate events per year
+        historical_events = historical_data.groupby(
+            historical_data['date'].dt.year)['is_heatwave'].sum()
+        current_events = current_data.groupby(
+            current_data['date'].dt.year)['is_heatwave'].sum()
+        
+        fig.add_trace(
+            go.Scatter(
+                x=['historical'] * len(historical_events),
+                y=historical_events,
+                mode='markers',
+                name='1980-1989',
+                marker=dict(color=self.colors['historical'], size=10)
+            ),
+            row=row, col=col
+        )
+        
+        fig.add_trace(
+            go.Scatter(
+                x=['current'] * len(current_events),
+                y=current_events,
+                mode='markers',
+                name='2015-2024',
+                marker=dict(color=self.colors['current'], size=10)
+            ),
+            row=row, col=col
+        )
+        
+        fig.update_xaxes(title_text='Period', row=row, col=col)
+        fig.update_yaxes(title_text='Heat Wave Events per Year', row=row, col=col)
 
-    def _validate_input_data(self, df, period):
-        """Validate input data for visualization."""
-        logger.debug(f"Validating {period} data")
+    def _add_seasonal_distribution(self, fig, historical_data, current_data, row, col):
+        """Add seasonal heat wave distribution subplot."""
+        # Calculate seasonal events
+        historical_seasonal = historical_data.groupby(
+            historical_data['date'].dt.month)['is_heatwave'].sum()
+        current_seasonal = current_data.groupby(
+            current_data['date'].dt.month)['is_heatwave'].sum()
         
-        # Check if DataFrame is empty
-        if df.empty:
-            raise ValueError(f"{period} data is empty")
+        fig.add_trace(
+            go.Bar(
+                x=historical_seasonal.index,
+                y=historical_seasonal,
+                name='1980-1989',
+                marker_color=self.colors['historical']
+            ),
+            row=row, col=col
+        )
         
-        # Check required columns
-        required_columns = ['temperature_celsius', 'date']
-        missing_cols = [col for col in required_columns if col not in df.columns]
-        if missing_cols:
-            raise ValueError(f"Missing required columns in {period} data: {missing_cols}")
+        fig.add_trace(
+            go.Bar(
+                x=current_seasonal.index,
+                y=current_seasonal,
+                name='2015-2024',
+                marker_color=self.colors['current']
+            ),
+            row=row, col=col
+        )
         
-        # Check data types
-        if not pd.api.types.is_datetime64_any_dtype(df['date']):
-            logger.warning(f"Converting date column to datetime in {period} data")
-            df['date'] = pd.to_datetime(df['date'])
-            
-        if not pd.api.types.is_float_dtype(df['temperature_celsius']):
-            logger.warning(f"Converting temperature to float in {period} data")
-            df['temperature_celsius'] = df['temperature_celsius'].astype(float)
-        
-        # Check for missing values
-        na_count = df['temperature_celsius'].isna().sum()
-        if na_count > 0:
-            logger.warning(f"Found {na_count} missing temperature values in {period} data")
-        
-        return df
-
-    def create_period_comparison(self, historical_data, current_data):
-        """Create period comparison visualization."""
-        logger.debug("Creating period comparison visualization")
-        try:
-            # Validate input data
-            historical_data = self._validate_input_data(historical_data, 'historical')
-            current_data = self._validate_input_data(current_data, 'current')
-            
-            logger.debug(f"Historical data shape: {historical_data.shape}")
-            logger.debug(f"Current data shape: {current_data.shape}")
-            
-            # Create the visualization
-            logger.debug("Creating figure")
-            fig = go.Figure()
-            
-            # Calculate summary statistics
-            hist_mean = historical_data['temperature_celsius'].mean()
-            curr_mean = current_data['temperature_celsius'].mean()
-            temp_change = curr_mean - hist_mean
-            
-            # Add temperature distribution
-            for data, period, color in [
-                (historical_data, '1980-1989', '#990F3D'),
-                (current_data, '2015-2024', '#FF8D8D')
-            ]:
-                logger.debug(f"Processing {period} data")
-                temps = data['temperature_celsius'].dropna()
-                mean_temp = temps.mean()
-                std_temp = temps.std()
-                
-                logger.debug(f"Temperature range for {period}: {temps.min():.1f}°C to {temps.max():.1f}°C")
-                logger.debug(f"Number of temperature readings for {period}: {len(temps)}")
-                
-                try:
-                    fig.add_trace(
-                        go.Histogram(
-                            x=temps,
-                            name=period,
-                            nbinsx=30,
-                            opacity=0.7,
-                            marker_color=color,
-                            histnorm='probability',
-                            hovertemplate=(
-                                f"Period: {period}<br>" +
-                                "Temperature: %{x:.1f}°C<br>" +
-                                "Proportion: %{y:.1%}<br>" +
-                                f"Mean: {mean_temp:.1f}°C<br>" +
-                                f"Std Dev: {std_temp:.1f}°C<br>" +
-                                "<extra></extra>"
-                            )
-                        )
-                    )
-                    logger.debug(f"Successfully added trace for {period}")
-                except Exception as trace_error:
-                    logger.error(f"Error adding trace for {period}: {str(trace_error)}")
-                    raise
-
-            # Create title with key findings
-            title_text = (
-                "Temperature Distribution at Rahima Moosa Hospital<br>" +
-                "<span style='font-size: 14px;'>" +
-                "Comparison of Historical (1980-1989) vs Recent (2015-2024) Daily Maximum Temperatures<br>" +
-                f"<span style='color: {FT_COLORS['main_red']};'>" +
-                f"Mean temperature increase: {temp_change:+.1f}°C" +
-                "</span></span>"
-            )
-
-            # Update layout
-            logger.debug("Updating figure layout")
-            try:
-                fig.update_layout(
-                    title={
-                        'text': title_text,
-                        'y': 0.95,
-                        'x': 0.5,
-                        'xanchor': 'center',
-                        'yanchor': 'top'
-                    },
-                    xaxis_title={
-                        'text': 'Maximum Daily Temperature (°C)',
-                        'font': {'size': 12}
-                    },
-                    yaxis_title={
-                        'text': 'Proportion of Days',
-                        'font': {'size': 12}
-                    },
-                    template='plotly_white',
-                    height=800,
-                    width=1200,
-                    paper_bgcolor='#FFF1E5',
-                    plot_bgcolor='#FFF1E5',
-                    showlegend=True,
-                    legend={
-                        'orientation': 'h',
-                        'yanchor': 'bottom',
-                        'y': 1.02,
-                        'xanchor': 'right',
-                        'x': 1,
-                        'bgcolor': 'rgba(255, 255, 255, 0.8)',
-                        'bordercolor': FT_COLORS['axis_grey'],
-                        'borderwidth': 1
-                    },
-                    annotations=[
-                        # Source attribution
-                        {
-                            'text': (
-                                'Source: ERA5 reanalysis data (maximum daily temperature)<br>' +
-                                'Analysis shows changes in temperature distribution over 35-year period during summer and spring'
-                            ),
-                            'x': 0,
-                            'y': -0.15,
-                            'xref': 'paper',
-                            'yref': 'paper',
-                            'showarrow': False,
-                            'font': {'size': 10, 'color': FT_COLORS['mid_grey']},
-                            'align': 'left'
-                        }
-                    ],
-                    margin={'t': 100, 'b': 100}
-                )
-                
-                # Update axes for better readability
-                fig.update_xaxes(
-                    gridcolor='rgba(128,128,128,0.1)',
-                    tickfont={'size': 10},
-                    tickformat='.0f'
-                )
-                fig.update_yaxes(
-                    gridcolor='rgba(128,128,128,0.1)',
-                    tickfont={'size': 10},
-                    tickformat='.1%'
-                )
-                
-                logger.debug("Successfully updated figure layout")
-            except Exception as layout_error:
-                logger.error(f"Error updating layout: {str(layout_error)}")
-                raise
-
-            # Save with proper HTML structure
-            logger.debug("Saving visualization")
-            try:
-                timestamp = int(time.time())
-                output_path = self.save_visualization(fig, f'period_comparison_{timestamp}.html')
-                logger.debug(f"Successfully saved visualization to {output_path}")
-            except Exception as save_error:
-                logger.error(f"Error saving visualization: {str(save_error)}")
-                raise
-            
-            return fig
-            
-        except Exception as e:
-            logger.error(f"Error creating visualization: {str(e)}")
-            raise
-
-    def generate_html_wrapper(self, plotly_html):
-        """Wrap plotly HTML with proper metadata and viewport settings"""
-        html_template = f"""<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Heat Wave Analysis - Rahima Moosa Hospital</title>
-    <style>
-        body {{
-            margin: 0;
-            padding: 20px;
-            background-color: #FFF1E5;
-            font-family: Arial, sans-serif;
-        }}
-        .container {{
-            max-width: 1200px;
-            margin: 0 auto;
-        }}
-    </style>
-</head>
-<body>
-    <div class="container">
-        {plotly_html}
-    </div>
-</body>
-</html>"""
-        return html_template
-
-    def save_visualization(self, fig, filename):
-        """Save visualization with proper HTML wrapper"""
-        # Generate the plotly HTML
-        plotly_html = fig.to_html(include_plotlyjs=True, full_html=False)
-        
-        # Wrap it with proper HTML
-        full_html = self.generate_html_wrapper(plotly_html)
-        
-        # Save to file
-        output_path = self.output_dir / filename
-        with open(output_path, 'w', encoding='utf-8') as f:
-            f.write(full_html)
-        
-        return output_path
+        fig.update_xaxes(title_text='Month', row=row, col=col)
+        fig.update_yaxes(title_text='Heat Wave Events per Month', row=row, col=col)
 
 def main():
     """Example usage of the visualizer."""
@@ -571,7 +369,50 @@ def main():
     viz.plot_temperature_distribution(historical_data, current_data)
 
     # Create period comparison
-    viz.create_period_comparison(historical_data, current_data)
+    viz.create_period_comparison({
+        '1980-1989': {
+            'cash_transfer': {
+                'mean_temperature': 25.0,
+                'uncertainty': 1.0,
+                'heat_wave_events': 10,
+                'heat_wave_days': 20,
+                'mean_duration': 3.0
+            },
+            'moderate': {
+                'heat_wave_events': 5,
+                'mean_duration': 2.0
+            },
+            'extreme': {
+                'heat_wave_events': 2,
+                'mean_duration': 1.5
+            },
+            'saws': {
+                'heat_wave_events': 8,
+                'mean_duration': 2.5
+            }
+        },
+        '2015-2024': {
+            'cash_transfer': {
+                'mean_temperature': 26.0,
+                'uncertainty': 1.2,
+                'heat_wave_events': 15,
+                'heat_wave_days': 30,
+                'mean_duration': 3.5
+            },
+            'moderate': {
+                'heat_wave_events': 7,
+                'mean_duration': 2.2
+            },
+            'extreme': {
+                'heat_wave_events': 3,
+                'mean_duration': 1.8
+            },
+            'saws': {
+                'heat_wave_events': 10,
+                'mean_duration': 2.8
+            }
+        }
+    })
 
 if __name__ == "__main__":
     main()
