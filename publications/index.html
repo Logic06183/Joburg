@@ -1,56 +1,174 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quantifying intra-urban socio-economic and environmental vulnerability to extreme heat events in Johannesburg, South Africa</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Quantifying intra-urban socio-economic and environmental vulnerability to extreme heat events in Johannesburg, South Africa</title>
+  <style>
+    body {
+      font-family: "Times New Roman", Times, serif;
+      line-height: 1.6;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 2em;
+      background: #fff;
+      color: #333;
+      position: relative;
+    }
+
+    /* Watermark */
+    body::before {
+      content: "PREPRINT";
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) rotate(-45deg);
+      font-size: 120px;
+      color: rgba(200, 200, 200, 0.2);
+      pointer-events: none;
+      z-index: -1;
+    }
+
+    h1, h2, h3, h4, h5, h6 {
+      color: #000;
+      line-height: 1.2;
+      margin-top: 1.5em;
+      margin-bottom: 0.5em;
+    }
+
+    h1 { font-size: 24pt; text-align: center; }
+    h2 { font-size: 18pt; }
+    h3 { font-size: 14pt; }
+
+    .authors {
+      text-align: center;
+      margin: 1em 0;
+      font-size: 12pt;
+    }
+
+    .affiliations {
+      margin: 1em 0;
+      font-size: 10pt;
+    }
+
+    .corresponding-author {
+      margin: 1em 0;
+      font-size: 10pt;
+      border: 1px solid #ddd;
+      padding: 1em;
+      background: #f9f9f9;
+    }
+
+    .abstract {
+      margin: 2em 0;
+      font-size: 11pt;
+    }
+
+    .abstract h2 {
+      font-size: 14pt;
+      margin-bottom: 0.5em;
+    }
+
+    .keywords {
+      font-size: 10pt;
+      margin: 1em 0;
+      font-style: italic;
+    }
+
+    .status {
+      text-align: center;
+      font-weight: bold;
+      color: #666;
+      margin: 1em 0;
+      padding: 0.5em;
+      border: 1px solid #ddd;
+      background: #f9f9f9;
+    }
+
+    /* Section numbering */
+    body { counter-reset: section subsection; }
+    
+    h2:not(.unnumbered):before {
+      counter-increment: section;
+      content: counter(section) ". ";
+    }
+    
+    h3:not(.unnumbered):before {
+      counter-increment: subsection;
+      content: counter(section) "." counter(subsection) " ";
+    }
+
+    @media print {
+      body::before {
+        font-size: 60px;
+        color: rgba(200, 200, 200, 0.4);
+      }
+    }
+  </style>
 </head>
 <body>
-    <div class="paper-header">
-        <h1>Quantifying intra-urban socio-economic and environmental vulnerability to extreme heat events in Johannesburg, South Africa</h1>
-        <p class="authors">Craig Parker¹*, Craig Mahlasi², Tamara Govindasamy², Lebohang Radebe¹, Nicholas Brian Brink¹, Christopher Jack³, Madina Doumbia⁴, Etienne Kouakou⁵, Matthew Chersich¹, Gueladio Cisse⁴, Sibusisiwe Makhanya², for the HE2AT Center Group</p>
-        
-        <div class="affiliations">
-            <p>¹ Wits Planetary Health Research, Faculty of Health Sciences, University of the Witwatersrand, Johannesburg, South Africa</p>
-            <p>² IBM Research - Africa, South Africa</p>
-            <p>³ Climate System Analysis Group, University of Cape Town, South Africa</p>
-            <p>⁴ University Peleforo Gon Coulibaly, Côte d'Ivoire</p>
-            <p>⁵ Centre Suisse de Recherches Scientifiques, Côte d'Ivoire</p>
-        </div>
+<h1>Quantifying intra-urban socio-economic and environmental
+vulnerability to extreme heat events in Johannesburg, South Africa</h1>
 
-        <div class="corresponding-author">
-            <p>* Corresponding Author:<br>
-            Craig Parker<br>
-            Email: craig.parker@witsphr.org<br>
-            Wits Planetary Health Research<br>
-            Faculty of Health Sciences<br>
-            University of the Witwatersrand<br>
-            7 York Road, Parktown<br>
-            Johannesburg, 2193<br>
-            South Africa</p>
-        </div>
-    </div>
 
-    <div class="preprint-status">
-        <p>PREPRINT - Under Review at International Journal of Biometeorology</p>
-    </div>
 
-    <div class="abstract">
-        <h2>Abstract</h2>
-        <p>Urban populations face increasing vulnerability to extreme heat events, particularly in rapidly urbanising Global South cities where environmental exposure intersects with socioeconomic inequality and limited healthcare access. This study quantifies heat vulnerability across Johannesburg, South Africa, by integrating high-resolution environmental data with socio-economic and health metrics across 135 urban wards. We examine how historical urban development patterns influence contemporary vulnerability distributions using principal component analysis and spatial statistics.</p>
-        <!-- Rest of abstract -->
-    </div>
 
-    <div class="keywords">
-        <p><strong>Keywords:</strong> Urban Heat Vulnerability, Spatial Analysis, Healthcare Access, Environmental Justice, Climate Adaptation, Principal Component Analysis, Johannesburg, Environmental Health</p>
-    </div>
 
-    <div class="main-content">
-        <h2>1. Introduction</h2>
-        <h3>1.1 Background</h3>
-        <p>Climate change is significantly reshaping urban life, with extreme heat events becoming more frequent and severe [1, 2]. Urban populations face increasing vulnerability to these events, with risks shaped by complex interactions between environmental exposure, socioeconomic conditions, and health status [3, 4]. This vulnerability is particularly acute in rapidly urbanising Global South cities, where historical inequalities and limited adaptive capacity compound environmental challenges[5, 6].</p>
-        <!-- Rest of content -->
-    </div>
+
+
+<h1
+id="quantifying-intra-urban-socio-economic-and-environmental-vulnerability-to-extreme-heat-events-in-johannesburg-south-africa">Quantifying
+intra-urban socio-economic and environmental vulnerability to extreme
+heat events in Johannesburg, South Africa</h1>
+<h2 id="authors">Authors</h2>
+<p>Craig Parker¹*, Craig Mahlasi², Tamara Govindasamy², Lebohang
+Radebe¹, Nicholas Brian Brink¹, Christopher Jack³, Madina Doumbia⁴,
+Etienne Kouakou⁵, Matthew Chersich¹, Gueladio Cisse⁴, Sibusisiwe
+Makhanya², for the HE2AT Center Group</p>
+<h2 id="affiliations">Affiliations</h2>
+<p>¹ Wits Planetary Health Research, Faculty of Health Sciences,
+University of the Witwatersrand, Johannesburg, South Africa<br />
+² IBM Research - Africa, South Africa<br />
+³ Climate System Analysis Group, University of Cape Town, South
+Africa<br />
+⁴ University Peleforo Gon Coulibaly, Côte d’Ivoire<br />
+⁵ Centre Suisse de Recherches Scientifiques, Côte d’Ivoire</p>
+<h2 id="corresponding-author">Corresponding Author</h2>
+<p>Craig Parker<br />
+Email: craig.parker@witsphr.org<br />
+Wits Planetary Health Research<br />
+Faculty of Health Sciences<br />
+University of the Witwatersrand<br />
+7 York Road, Parktown<br />
+Johannesburg, 2193<br />
+South Africa</p>
+<h2 id="status">Status</h2>
+<p>PREPRINT - Under Review at International Journal of
+Biometeorology</p>
+<h2 id="abstract">Abstract</h2>
+<p>Urban populations face increasing vulnerability to extreme heat
+events, particularly in rapidly urbanising Global South cities where
+environmental exposure intersects with socioeconomic inequality and
+limited healthcare access. This study quantifies heat vulnerability
+across Johannesburg, South Africa, by integrating high-resolution
+environmental data with socio-economic and health metrics across 135
+urban wards. We examine how historical urban development patterns
+influence contemporary vulnerability distributions using principal
+component analysis and spatial statistics.</p>
+<h2 id="keywords">Keywords</h2>
+<p>Urban Heat Vulnerability, Spatial Analysis, Healthcare Access,
+Environmental Justice, Climate Adaptation, Principal Component Analysis,
+Johannesburg, Environmental Health</p>
+<h2 id="introduction">1. Introduction</h2>
+<h3 id="background">1.1 Background</h3>
+<p>Climate change is significantly reshaping urban life, with extreme
+heat events becoming more frequent and severe [1, 2]. Urban populations
+face increasing vulnerability to these events, with risks shaped by
+complex interactions between environmental exposure, socioeconomic
+conditions, and health status [3, 4]. This vulnerability is particularly
+acute in rapidly urbanising Global South cities, where historical
+inequalities and limited adaptive capacity compound environmental
+challenges[5, 6].</p>
 </body>
 </html>

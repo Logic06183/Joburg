@@ -15,7 +15,105 @@ $if(keywords)$
 $endif$
   <title>$if(title-prefix)$$title-prefix$ – $endif$$pagetitle$</title>
   <style>
-    $styles.html()$
+    body {
+      font-family: "Times New Roman", Times, serif;
+      line-height: 1.6;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 2em;
+      background: #fff;
+      color: #333;
+      position: relative;
+    }
+
+    /* Watermark */
+    body::before {
+      content: "PREPRINT";
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) rotate(-45deg);
+      font-size: 120px;
+      color: rgba(200, 200, 200, 0.2);
+      pointer-events: none;
+      z-index: -1;
+    }
+
+    h1, h2, h3, h4, h5, h6 {
+      color: #000;
+      line-height: 1.2;
+      margin-top: 1.5em;
+      margin-bottom: 0.5em;
+    }
+
+    h1 { font-size: 24pt; text-align: center; }
+    h2 { font-size: 18pt; }
+    h3 { font-size: 14pt; }
+
+    .authors {
+      text-align: center;
+      margin: 1em 0;
+      font-size: 12pt;
+    }
+
+    .affiliations {
+      margin: 1em 0;
+      font-size: 10pt;
+    }
+
+    .corresponding-author {
+      margin: 1em 0;
+      font-size: 10pt;
+      border: 1px solid #ddd;
+      padding: 1em;
+      background: #f9f9f9;
+    }
+
+    .abstract {
+      margin: 2em 0;
+      font-size: 11pt;
+    }
+
+    .abstract h2 {
+      font-size: 14pt;
+      margin-bottom: 0.5em;
+    }
+
+    .keywords {
+      font-size: 10pt;
+      margin: 1em 0;
+      font-style: italic;
+    }
+
+    .status {
+      text-align: center;
+      font-weight: bold;
+      color: #666;
+      margin: 1em 0;
+      padding: 0.5em;
+      border: 1px solid #ddd;
+      background: #f9f9f9;
+    }
+
+    /* Section numbering */
+    body { counter-reset: section subsection; }
+    
+    h2:not(.unnumbered):before {
+      counter-increment: section;
+      content: counter(section) ". ";
+    }
+    
+    h3:not(.unnumbered):before {
+      counter-increment: subsection;
+      content: counter(section) "." counter(subsection) " ";
+    }
+
+    @media print {
+      body::before {
+        font-size: 60px;
+        color: rgba(200, 200, 200, 0.4);
+      }
+    }
   </style>
 $for(css)$
   <link rel="stylesheet" href="$css$" />
@@ -32,36 +130,38 @@ $for(include-before)$
 $include-before$
 $endfor$
 $if(title)$
-<header id="title-block-header">
-<h1 class="title">$title$</h1>
-$if(subtitle)$
-<p class="subtitle">$subtitle$</p>
+<h1>$title$</h1>
 $endif$
+
+$if(authors)$
+<div class="authors">$authors$</div>
+$endif$
+
+$if(affiliations)$
+<div class="affiliations">$affiliations$</div>
+$endif$
+
+$if(corresponding-author)$
+<div class="corresponding-author">$corresponding-author$</div>
+$endif$
+
 $if(status)$
-<p class="status">$status$</p>
+<div class="status">$status$</div>
 $endif$
-$for(author)$
-<p class="author">$author$</p>
-$endfor$
-$if(date)$
-<p class="date">$date$</p>
-$endif$
+
 $if(abstract)$
 <div class="abstract">
-<h2>Abstract</h2>
+<h2 class="unnumbered">Abstract</h2>
 $abstract$
 </div>
 $endif$
-</header>
+
+$if(keywords)$
+<div class="keywords">
+<strong>Keywords:</strong> $keywords$
+</div>
 $endif$
-$if(toc)$
-<nav id="$idprefix$TOC" role="doc-toc">
-$if(toc-title)$
-<h2 id="$idprefix$toc-title">$toc-title$</h2>
-$endif$
-$table-of-contents$
-</nav>
-$endif$
+
 $body$
 $for(include-after)$
 $include-after$
